@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = [
+    "packet-parser",
+    "reliable-udp",
+    "tls-clienthello",
+    "gre-vxlan",
+    "dns-rust",
+]
