@@ -174,3 +174,82 @@ func TestAckRoundTrip(t *testing.T) {
 		}
 	}
 }
+
+func TestParseError(t *testing.T) {
+	longMsg := bytes.Repeat([]byte{'x'}, 512)
+	tooLong := append(append([]byte{0, 5, 0, 1}, longMsg...), 0) // 517 bytes
+
+	tests := []struct {
+		name    string
+		input   []byte
+		want    ErrorPacket
+		wantErr bool
+	}{
+		{"file not found", []byte{0, 5, 0, 1, 'n', 'o', 0}, ErrorPacket{1, "no"}, false},
+		{"empty message", []byte{0, 5, 0, 2, 0}, ErrorPacket{2, ""}, false},
+		{"missing terminator", []byte{0, 5, 0, 1, 'n', 'o'}, ErrorPacket{}, true},
+		{"too short", []byte{0, 5, 0, 1}, ErrorPacket{}, true},
+		{"zero inside message", []byte{0, 5, 0, 1, 'a', 0, 'b', 0}, ErrorPacket{}, true},
+		{"wrong opcode", []byte{0, 4, 0, 1, 'a', 0}, ErrorPacket{}, true},
+		{"too long", tooLong, ErrorPacket{}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ParseError(tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("err = %v, wantErr = %v", err, tt.wantErr)
+			}
+			if got != tt.want {
+				t.Errorf("got %+v, want %+v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestErrorMarshal(t *testing.T) {
+	long511 := string(bytes.Repeat([]byte{'x'}, 511))
+	long512 := string(bytes.Repeat([]byte{'x'}, 512))
+
+	tests := []struct {
+		name    string
+		in      ErrorPacket
+		want    []byte
+		wantErr bool
+	}{
+		{"file not found", ErrorPacket{1, "no"}, []byte{0, 5, 0, 1, 'n', 'o', 0}, false},
+		{"empty message", ErrorPacket{2, ""}, []byte{0, 5, 0, 2, 0}, false},
+		{"code 256", ErrorPacket{256, "x"}, []byte{0, 5, 1, 0, 'x', 0}, false}, // byte order check
+		{"511 chars is the max", ErrorPacket{1, long511},
+			append(append([]byte{0, 5, 0, 1}, []byte(long511)...), 0), false},
+		{"512 chars too long", ErrorPacket{1, long512}, nil, true},
+		{"zero inside message", ErrorPacket{1, "a\x00b"}, nil, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.in.MarshalBinary()
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("err = %v, wantErr = %v", err, tt.wantErr)
+			}
+			if !bytes.Equal(got, tt.want) {
+				t.Errorf("got % x, want % x", got, tt.want)
+			}
+		})
+	}
+}
+
+// Round trip: ParseError(MarshalBinary(x)) must give back x.
+func TestErrorRoundTrip(t *testing.T) {
+	for _, in := range []ErrorPacket{{1, "no"}, {0, ""}, {7, "no such user"}, {65535, "x"}} {
+		b, err := in.MarshalBinary()
+		if err != nil {
+			t.Fatalf("%+v: marshal: %v", in, err)
+		}
+		out, err := ParseError(b)
+		if err != nil {
+			t.Fatalf("%+v: parse: %v", in, err)
+		}
+		if out != in {
+			t.Errorf("got %+v, want %+v", out, in)
+		}
+	}
+}
