@@ -1,0 +1,93 @@
+# ---------- Go ----------
+*.exe
+*.test
+*.out
+*.prof
+coverage.txt
+coverage.html
+/bin/
+/dist/
+vendor/
+
+# ---------- Rust ----------
+target/
+**/*.rs.bk
+# Cargo.lock zostaw w repozytorium dla programów (binarek)
+
+# ---------- Python (skrypty, testy integracyjne) ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Node (jeśli używasz Node/TS) ----------
+node_modules/
+npm-debug.log*
+
+# ---------- Sekrety i konfiguracja lokalna (NIGDY nie commituj) ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+!testdata/**/*.pem
+!testdata/**/*.crt
+secrets/
+*.secret
+credentials.json
+
+# ---------- Przechwycone pakiety (duże pliki trzymaj poza repozytorium) ----------
+captures/
+*.pcapng
+*.pcap
+!testdata/**/*.pcap
+
+# ---------- Laboratorium sieciowe i infrastruktura ----------
+clab-*/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.kubeconfig
+kubeconfig
+
+# ---------- Dane lokalne baz i narzędzi ----------
+*.db
+*.sqlite
+*.sqlite3
+/data/
+pgdata/
+clickhouse-data/
+redis-data/
+
+# ---------- Wyniki testów wydajności i fuzzingu ----------
+/loadtest/results/
+/bench/results/
+fuzz/artifacts/
+fuzz/corpus/
+testdata/fuzz/*/corpus/
+
+# ---------- Programy BPF (zbudowane) ----------
+*.bpf.o
+*.o
+
+# ---------- Logi i pliki tymczasowe ----------
+*.log
+*.tmp
+*.swp
+*~
+
+# ---------- Edytory i IDE ----------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.iml
+
+# ---------- System ----------
+.DS_Store
+Thumbs.db
