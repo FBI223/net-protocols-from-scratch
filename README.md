@@ -1,6 +1,6 @@
 # protocols-from-scratch
 
-Network protocols implemented from scratch in **Go** and **Rust**, straight from the RFCs
+Network protocols implemented from scratch in **Go**, **Rust** and **C++**, straight from the RFCs
 
 ## What this repository is
 
@@ -14,6 +14,7 @@ at the packet level, not to replace production libraries.
 |---|---|
 | `go/` | One Go module. Every protocol is a package with its own README. |
 | `rust/` | One Cargo workspace. Every protocol is a crate with its own README. |
+| `cpp/` | One CMake project. Every protocol is a subdirectory with its own library, program and tests. |
 | `testdata/pcap/` | Small captured packets used in tests. Keep large captures out of the repo. |
 | `docs/rfc-notes/` | My notes from reading the RFCs. |
 
@@ -24,7 +25,7 @@ at the packet level, not to replace production libraries.
 | # | Protocol | RFC | Where |
 |---|---|---|---|
 | 1 | TFTP | [1350](https://www.rfc-editor.org/rfc/rfc1350) | [`go/tftp`](go/tftp) |
-| 2 | TCP and HTTP/1.1 | [9293](https://www.rfc-editor.org/rfc/rfc9293), [9112](https://www.rfc-editor.org/rfc/rfc9112) | [`go/tcp-http`](go/tcp-http) |
+| 2 | TCP and HTTP/1.1 | [9293](https://www.rfc-editor.org/rfc/rfc9293), [9112](https://www.rfc-editor.org/rfc/rfc9112) | [`go/http1`](go/http1) |
 | 3 | WebSocket | [6455](https://www.rfc-editor.org/rfc/rfc6455) | [`go/websocket`](go/websocket) |
 | 4 | DNS | [1034](https://www.rfc-editor.org/rfc/rfc1034), [1035](https://www.rfc-editor.org/rfc/rfc1035), [6891](https://www.rfc-editor.org/rfc/rfc6891) | [`go/dns`](go/dns), then [`rust/dns-rust`](rust/dns-rust) |
 | 5 | DHCP | [2131](https://www.rfc-editor.org/rfc/rfc2131), [2132](https://www.rfc-editor.org/rfc/rfc2132) | [`go/dhcp`](go/dhcp) |
@@ -58,6 +59,44 @@ at the packet level, not to replace production libraries.
 | 18 | SIP + SDP | [3261](https://www.rfc-editor.org/rfc/rfc3261), [8866](https://www.rfc-editor.org/rfc/rfc8866) | [`go/sip`](go/sip) |
 | 19 | RTP / RTCP | [3550](https://www.rfc-editor.org/rfc/rfc3550) | [`go/rtp`](go/rtp) |
 | 20 | MQTT 3.1.1 / 5.0 | OASIS specification | [`go/mqtt`](go/mqtt) |
+
+### Level 5 · Routing, access and infrastructure
+
+| # | Protocol | RFC | Where |
+|---|---|---|---|
+| 21 | BFD | [5880](https://www.rfc-editor.org/rfc/rfc5880), [5881](https://www.rfc-editor.org/rfc/rfc5881) | [`go/bfd`](go/bfd), then [`cpp/bfd`](cpp/bfd) |
+| 22 | LLDP | IEEE 802.1AB | [`go/lldp`](go/lldp) |
+| 23 | IS-IS | ISO 10589, [1195](https://www.rfc-editor.org/rfc/rfc1195) | [`go/isis`](go/isis) |
+| 24 | VRRP | [5798](https://www.rfc-editor.org/rfc/rfc5798) | [`go/vrrp`](go/vrrp) |
+| 25 | ARP and ICMP tools (`arping`, `ping`, `traceroute`) | [826](https://www.rfc-editor.org/rfc/rfc826), [792](https://www.rfc-editor.org/rfc/rfc792), [4443](https://www.rfc-editor.org/rfc/rfc4443) | [`go/arp`](go/arp), [`go/icmp`](go/icmp) |
+| 26 | mDNS and DNS-SD | [6762](https://www.rfc-editor.org/rfc/rfc6762), [6763](https://www.rfc-editor.org/rfc/rfc6763) | [`go/mdns`](go/mdns) |
+| 27 | PPPoE | [2516](https://www.rfc-editor.org/rfc/rfc2516), [1661](https://www.rfc-editor.org/rfc/rfc1661) | [`go/pppoe`](go/pppoe) |
+| 28 | RPKI-to-Router | [8210](https://www.rfc-editor.org/rfc/rfc8210), [6811](https://www.rfc-editor.org/rfc/rfc6811) | [`go/rpki-rtr`](go/rpki-rtr) |
+| 29 | Diameter | [6733](https://www.rfc-editor.org/rfc/rfc6733) | [`go/diameter`](go/diameter), then [`cpp/diameter`](cpp/diameter) |
+| 30 | TURN | [8656](https://www.rfc-editor.org/rfc/rfc8656) | [`go/turn`](go/turn) |
+| 31 | NETCONF | [6241](https://www.rfc-editor.org/rfc/rfc6241) | [`go/netconf`](go/netconf) |
+
+### Level 6 · Application layer and tunnels
+
+| # | Protocol | RFC | Where |
+|---|---|---|---|
+| 32 | HTTP/2 | [9113](https://www.rfc-editor.org/rfc/rfc9113), [7541](https://www.rfc-editor.org/rfc/rfc7541) | [`go/http2`](go/http2), then [`rust/http2`](rust/http2) |
+| 33 | gRPC | gRPC over HTTP/2 | [`go/grpc`](go/grpc) |
+| 34 | RESP (Redis protocol) | RESP2 / RESP3 | [`go/resp`](go/resp) |
+| 35 | L4 load balancer | none (design project) | [`go/l4-loadbalancer`](go/l4-loadbalancer) |
+| 36 | L7 reverse proxy | [9110](https://www.rfc-editor.org/rfc/rfc9110) | [`rust/reverse-proxy`](rust/reverse-proxy) |
+| 37 | WireGuard-style tunnel | WireGuard whitepaper | [`go/wireguard`](go/wireguard) |
+
+### Level 7 · C++: mobile core and fast packet processing
+
+| # | Protocol | Spec | Where |
+|---|---|---|---|
+| 38 | GTP-U / GTP-C | 3GPP TS 29.281, 29.274 | [`cpp/gtp`](cpp/gtp) |
+| 39 | SCTP | [9260](https://www.rfc-editor.org/rfc/rfc9260) | [`cpp/sctp`](cpp/sctp) |
+| 40 | PFCP | 3GPP TS 29.244 | [`cpp/pfcp`](cpp/pfcp) |
+| 41 | ASN.1 PER | ITU-T X.691 | [`cpp/asn1-per`](cpp/asn1-per) |
+| 42 | Longest-prefix-match FIB | none (data structures) | [`cpp/lpm-fib`](cpp/lpm-fib) |
+| 43 | NAT and connection tracking | [3022](https://www.rfc-editor.org/rfc/rfc3022) | [`cpp/nat-conntrack`](cpp/nat-conntrack) |
 
 ## What each protocol is about
 
@@ -122,6 +161,64 @@ location and call routing. *Verify with:* SIPp, Linphone, Wireshark.
 **20. MQTT 3.1.1 / 5.0.** A broker with CONNECT, PUBLISH, SUBSCRIBE, QoS 0 and 1, and retained messages.
 *Verify with:* `mosquitto_pub`, `mosquitto_sub`.
 
+**21. BFD.** Tiny hello packets that detect a dead link in milliseconds. BGP and OSPF use it as a fast failure
+detector. Go first, then C++ for the timer-sensitive path. *Verify with:* FRR (`bfdd`), BIRD, Wireshark.
+
+**22. LLDP.** How switches, routers and access points announce themselves to the device on the other end of a
+cable. This is how a controller builds its topology map. *Verify with:* `lldpd`, `tcpdump`.
+
+**23. IS-IS.** The second great link-state routing protocol, common in ISP backbones. Runs directly over Ethernet.
+Reuses the shortest-path code from OSPF. *Verify with:* FRR (`isisd`), Wireshark.
+
+**24. VRRP.** Routers share one virtual gateway address and a backup takes over when the master dies.
+*Verify with:* `keepalived`, Wireshark.
+
+**25. ARP and ICMP tools.** `arping`, `ping` and `traceroute` over raw sockets, in Go. The Rust parser in item 6
+covers the same headers from the packet-parsing side. *Verify with:* `arping`, `ping`, `tcpdump`.
+
+**26. mDNS and DNS-SD.** DNS without a server, over multicast. This is how a controller finds devices on a local
+network. Reuses the codec from item 4. *Verify with:* `avahi-browse`, `dns-sd`.
+
+**27. PPPoE.** How a home customer connects to an ISP over Ethernet: discovery, PPP, LCP, authentication and
+address assignment. Authenticates against item 17. *Verify with:* `pppd` in a network namespace.
+
+**28. RPKI-to-Router.** How a router learns which AS may announce which prefix, and the origin validation that
+uses it. Hooks into item 12. *Verify with:* Routinator, StayRTR.
+
+**29. Diameter.** The AAA protocol of mobile networks, successor of RADIUS. *Verify with:* freeDiameter, Wireshark.
+
+**30. TURN.** A relay for clients behind NAT. Completes item 8. *Verify with:* `coturn`, Wireshark.
+
+**31. NETCONF.** Configuring network devices with XML RPCs over SSH, the base of network automation.
+*Verify with:* `netopeer2`, `ncclient`.
+
+**32. HTTP/2.** Binary framing, HPACK header compression and multiplexed streams, over cleartext (h2c) first.
+*Verify with:* `curl --http2-prior-knowledge`, `h2spec`, `nghttp`.
+
+**33. gRPC.** Length-prefixed messages over HTTP/2 streams with status in the trailers, built on item 32.
+*Verify with:* `grpcurl`, a grpc-go client.
+
+**34. RESP.** The Redis protocol and a small server that speaks it: stream parsing, pipelining, many connections.
+*Verify with:* `redis-cli`, `redis-benchmark`.
+
+**35. L4 load balancer.** A TCP and UDP balancer with several algorithms, health checks and connection draining.
+*Verify with:* `curl`, `wrk`, `iperf3`.
+
+**36. L7 reverse proxy.** A Rust proxy with routing, upstream pools and health checks. Pairs with item 35.
+*Verify with:* `curl`, `wrk`.
+
+**37. WireGuard-style tunnel.** A Noise handshake, encrypted transport packets and a TUN device. Builds on the
+tunnel idea from item 11. *Verify with:* `wg` in two network namespaces.
+
+**38 to 41. Mobile core.** GTP tunnels, SCTP, PFCP and ASN.1 PER decoding: the protocols between a base station
+and the core network. *Verify with:* Open5GS, free5GC, Wireshark.
+
+**42. Longest-prefix-match FIB.** A trie and a DIR-24-8 table for IP lookup, benchmarked against each other.
+*Verify with:* a routing table dump (RIPE RIS), a benchmark.
+
+**43. NAT and connection tracking.** Flow table, address and port translation with checksum updates.
+*Verify with:* `conntrack`, `iptables` in a network namespace.
+
 ## Libraries used instead of writing from scratch
 
 | Topic | Libraries | Why |
@@ -129,8 +226,8 @@ location and call routing. *Verify with:* SIPp, Linphone, Wireshark.
 | QUIC and HTTP/3 | `quic-go`, `quinn` | A huge specification. Item 10 teaches the core ideas. |
 | TLS | `crypto/tls`, `rustls` | Never write your own cryptography. |
 | SSH and NETCONF | `golang.org/x/crypto/ssh`, `russh` | Cryptography. Focus on the client and automation. |
-| gRPC and gNMI | `grpc-go`, `tonic` | Designing the API in protobuf is enough. |
-| WireGuard / Noise | `wireguard-go`, `boringtun` | Build the tunnel from item 11, take encryption from a library. |
+| gRPC in production, gNMI | `grpc-go`, `tonic` | Item 33 builds the transport; production services use the library. |
+| WireGuard / Noise | `golang.org/x/crypto`, `wireguard-go` | Item 37 writes the protocol and tunnel; the primitives come from the library. |
 
 ## Definition of done for a protocol
 
@@ -149,6 +246,7 @@ A protocol counts as finished only when all of this is true:
 ```bash
 (cd go && go test -race ./...)
 (cd rust && cargo test --all)
+(cd cpp && cmake -S . -B build && cmake --build build && ctest --test-dir build)
 ```
 
 Fuzzing a parser:
