@@ -1,4 +1,4 @@
-package tcphttp
+package http1
 
 import "testing"
 
