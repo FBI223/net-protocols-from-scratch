@@ -15,7 +15,8 @@ at the packet level, not to replace production libraries.
 | `go/` | One Go module. Every protocol is a package with its own README. |
 | `rust/` | One Cargo workspace. Every protocol is a crate with its own README. |
 | `cpp/` | One CMake project. Every protocol is a subdirectory with its own library, program and tests. |
-| `testdata/pcap/` | Small captured packets used in tests. Keep large captures out of the repo. |
+| `<project>/testdata/pcap/` | Small captured packets used only by that project's tests. Every Go package, Rust crate and C++ project has one. |
+| `testdata/pcap/` | Captures shared between projects, for example the same packets used to test a Go version and its Rust or C++ port. Keep large captures out of the repo. |
 | `docs/rfc-notes/` | My notes from reading the RFCs. |
 
 ## Protocols
@@ -219,7 +220,7 @@ and the core network. *Verify with:* Open5GS, free5GC, Wireshark.
 ## Protocols in more than one language
 
 Some protocols appear in two languages on purpose. The rule: write the Go version first as the reference, then
-port it to Rust or C++ using the same captured packets from `testdata/pcap/`, so the two can be compared on
+port it to Rust or C++ using the same captured packets (kept in the shared `testdata/pcap/`), so the two can be compared on
 correctness, speed and memory. A port counts as done only when it passes the same test vectors.
 
 | Protocol | Go | Rust | C++ | How they differ |
@@ -247,7 +248,7 @@ correctness, speed and memory. A port counts as done only when it passes the sam
 A protocol counts as finished only when all of this is true:
 
 - Implemented from the RFC, with the section numbers in code comments.
-- Unit tests plus at least one test on a real captured packet from `testdata/pcap/`.
+- Unit tests plus at least one test on a real captured packet from the project's own `testdata/pcap/` (or the shared one).
 - A fuzz target for every parser, run for at least 30 seconds without a crash.
 - Checked with a real client or server tool, named in the protocol's README.
 - A benchmark or load number with the exact command that produced it.

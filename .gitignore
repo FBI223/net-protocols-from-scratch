@@ -35,8 +35,8 @@ npm-debug.log*
 *.key
 *.crt
 *.p12
-!testdata/**/*.pem
-!testdata/**/*.crt
+!**/testdata/**/*.pem
+!**/testdata/**/*.crt
 secrets/
 *.secret
 credentials.json
@@ -45,7 +45,8 @@ credentials.json
 captures/
 *.pcapng
 *.pcap
-!testdata/**/*.pcap
+!**/testdata/**/*.pcap
+!**/testdata/**/*.pcapng
 
 # ---------- Laboratorium sieciowe i infrastruktura ----------
 clab-*/
