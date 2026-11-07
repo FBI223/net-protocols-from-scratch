@@ -48,55 +48,54 @@ at the packet level, not to replace production libraries.
 | 12 | BGP-4 | [4271](https://www.rfc-editor.org/rfc/rfc4271), [7854](https://www.rfc-editor.org/rfc/rfc7854) (BMP) | [`go/bgp`](go/bgp) |
 | 13 | OSPFv2 | [2328](https://www.rfc-editor.org/rfc/rfc2328) | [`go/ospf`](go/ospf) |
 | 14 | SNMP v2c | [3416](https://www.rfc-editor.org/rfc/rfc3416) | [`go/snmp`](go/snmp) |
-| 15 | sFlow v5 / IPFIX | [7011](https://www.rfc-editor.org/rfc/rfc7011) | [`go/sflow`](go/sflow) |
-| 16 | Syslog | [5424](https://www.rfc-editor.org/rfc/rfc5424) | [`go/syslog`](go/syslog) |
+| 15 | Syslog | [5424](https://www.rfc-editor.org/rfc/rfc5424) | [`go/syslog`](go/syslog) |
 
 ### Level 4 · ISP and telecom
 
 | # | Protocol | RFC | Where |
 |---|---|---|---|
-| 17 | RADIUS (with accounting) | [2865](https://www.rfc-editor.org/rfc/rfc2865), [2866](https://www.rfc-editor.org/rfc/rfc2866) | [`go/radius`](go/radius) |
-| 18 | SIP + SDP | [3261](https://www.rfc-editor.org/rfc/rfc3261), [8866](https://www.rfc-editor.org/rfc/rfc8866) | [`go/sip`](go/sip) |
-| 19 | RTP / RTCP | [3550](https://www.rfc-editor.org/rfc/rfc3550) | [`go/rtp`](go/rtp) |
-| 20 | MQTT 3.1.1 / 5.0 | OASIS specification | [`go/mqtt`](go/mqtt) |
+| 16 | RADIUS (with accounting) | [2865](https://www.rfc-editor.org/rfc/rfc2865), [2866](https://www.rfc-editor.org/rfc/rfc2866) | [`go/radius`](go/radius) |
+| 17 | SIP + SDP | [3261](https://www.rfc-editor.org/rfc/rfc3261), [8866](https://www.rfc-editor.org/rfc/rfc8866) | [`go/sip`](go/sip) |
+| 18 | RTP / RTCP | [3550](https://www.rfc-editor.org/rfc/rfc3550) | [`go/rtp`](go/rtp) |
+| 19 | MQTT 3.1.1 / 5.0 | OASIS specification | [`go/mqtt`](go/mqtt) |
 
 ### Level 5 · Routing, access and infrastructure
 
 | # | Protocol | RFC | Where |
 |---|---|---|---|
-| 21 | BFD | [5880](https://www.rfc-editor.org/rfc/rfc5880), [5881](https://www.rfc-editor.org/rfc/rfc5881) | [`go/bfd`](go/bfd), then [`cpp/bfd`](cpp/bfd) |
-| 22 | LLDP | IEEE 802.1AB | [`go/lldp`](go/lldp) |
-| 23 | IS-IS | ISO 10589, [1195](https://www.rfc-editor.org/rfc/rfc1195) | [`go/isis`](go/isis) |
-| 24 | VRRP | [5798](https://www.rfc-editor.org/rfc/rfc5798) | [`go/vrrp`](go/vrrp) |
-| 25 | ARP and ICMP tools (`arping`, `ping`, `traceroute`) | [826](https://www.rfc-editor.org/rfc/rfc826), [792](https://www.rfc-editor.org/rfc/rfc792), [4443](https://www.rfc-editor.org/rfc/rfc4443) | [`go/arp`](go/arp), [`go/icmp`](go/icmp) |
-| 26 | mDNS and DNS-SD | [6762](https://www.rfc-editor.org/rfc/rfc6762), [6763](https://www.rfc-editor.org/rfc/rfc6763) | [`go/mdns`](go/mdns) |
-| 27 | PPPoE | [2516](https://www.rfc-editor.org/rfc/rfc2516), [1661](https://www.rfc-editor.org/rfc/rfc1661) | [`go/pppoe`](go/pppoe) |
-| 28 | RPKI-to-Router | [8210](https://www.rfc-editor.org/rfc/rfc8210), [6811](https://www.rfc-editor.org/rfc/rfc6811) | [`go/rpki-rtr`](go/rpki-rtr) |
-| 29 | Diameter | [6733](https://www.rfc-editor.org/rfc/rfc6733) | [`go/diameter`](go/diameter), then [`cpp/diameter`](cpp/diameter) |
-| 30 | TURN | [8656](https://www.rfc-editor.org/rfc/rfc8656) | [`go/turn`](go/turn) |
-| 31 | NETCONF | [6241](https://www.rfc-editor.org/rfc/rfc6241) | [`go/netconf`](go/netconf) |
+| 20 | BFD | [5880](https://www.rfc-editor.org/rfc/rfc5880), [5881](https://www.rfc-editor.org/rfc/rfc5881) | [`go/bfd`](go/bfd), then [`cpp/bfd`](cpp/bfd) |
+| 21 | LLDP | IEEE 802.1AB | [`go/lldp`](go/lldp) |
+| 22 | IS-IS | ISO 10589, [1195](https://www.rfc-editor.org/rfc/rfc1195) | [`go/isis`](go/isis) |
+| 23 | VRRP | [5798](https://www.rfc-editor.org/rfc/rfc5798) | [`go/vrrp`](go/vrrp) |
+| 24 | ARP and ICMP tools (`arping`, `ping`, `traceroute`) | [826](https://www.rfc-editor.org/rfc/rfc826), [792](https://www.rfc-editor.org/rfc/rfc792), [4443](https://www.rfc-editor.org/rfc/rfc4443) | [`go/arp`](go/arp), [`go/icmp`](go/icmp) |
+| 25 | mDNS and DNS-SD | [6762](https://www.rfc-editor.org/rfc/rfc6762), [6763](https://www.rfc-editor.org/rfc/rfc6763) | [`go/mdns`](go/mdns) |
+| 26 | PPPoE | [2516](https://www.rfc-editor.org/rfc/rfc2516), [1661](https://www.rfc-editor.org/rfc/rfc1661) | [`go/pppoe`](go/pppoe) |
+| 27 | RPKI-to-Router | [8210](https://www.rfc-editor.org/rfc/rfc8210), [6811](https://www.rfc-editor.org/rfc/rfc6811) | [`go/rpki-rtr`](go/rpki-rtr) |
+| 28 | Diameter | [6733](https://www.rfc-editor.org/rfc/rfc6733) | [`go/diameter`](go/diameter), then [`cpp/diameter`](cpp/diameter) |
+| 29 | TURN | [8656](https://www.rfc-editor.org/rfc/rfc8656) | [`go/turn`](go/turn) |
+| 30 | NETCONF | [6241](https://www.rfc-editor.org/rfc/rfc6241) | [`go/netconf`](go/netconf) |
 
 ### Level 6 · Application layer and tunnels
 
 | # | Protocol | RFC | Where |
 |---|---|---|---|
-| 32 | HTTP/2 | [9113](https://www.rfc-editor.org/rfc/rfc9113), [7541](https://www.rfc-editor.org/rfc/rfc7541) | [`go/http2`](go/http2), then [`rust/http2`](rust/http2) |
-| 33 | gRPC | gRPC over HTTP/2 | [`go/grpc`](go/grpc) |
-| 34 | RESP (Redis protocol) | RESP2 / RESP3 | [`go/resp`](go/resp) |
-| 35 | L4 load balancer | none (design project) | [`go/l4-loadbalancer`](go/l4-loadbalancer) |
-| 36 | L7 reverse proxy | [9110](https://www.rfc-editor.org/rfc/rfc9110) | [`rust/reverse-proxy`](rust/reverse-proxy) |
-| 37 | WireGuard-style tunnel | WireGuard whitepaper | [`go/wireguard`](go/wireguard) |
+| 31 | HTTP/2 | [9113](https://www.rfc-editor.org/rfc/rfc9113), [7541](https://www.rfc-editor.org/rfc/rfc7541) | [`go/http2`](go/http2), then [`rust/http2`](rust/http2) |
+| 32 | gRPC | gRPC over HTTP/2 | [`go/grpc`](go/grpc) |
+| 33 | RESP (Redis protocol) | RESP2 / RESP3 | [`go/resp`](go/resp) |
+| 34 | L4 load balancer | none (design project) | [`go/l4-loadbalancer`](go/l4-loadbalancer) |
+| 35 | L7 reverse proxy | [9110](https://www.rfc-editor.org/rfc/rfc9110) | [`rust/reverse-proxy`](rust/reverse-proxy) |
+| 36 | WireGuard-style tunnel | WireGuard whitepaper | [`go/wireguard`](go/wireguard) |
 
 ### Level 7 · C++: mobile core and fast packet processing
 
 | # | Protocol | Spec | Where |
 |---|---|---|---|
-| 38 | GTP-U / GTP-C | 3GPP TS 29.281, 29.274 | [`cpp/gtp`](cpp/gtp) |
-| 39 | SCTP | [9260](https://www.rfc-editor.org/rfc/rfc9260) | [`cpp/sctp`](cpp/sctp) |
-| 40 | PFCP | 3GPP TS 29.244 | [`cpp/pfcp`](cpp/pfcp) |
-| 41 | ASN.1 PER | ITU-T X.691 | [`cpp/asn1-per`](cpp/asn1-per) |
-| 42 | Longest-prefix-match FIB | none (data structures) | [`cpp/lpm-fib`](cpp/lpm-fib) |
-| 43 | NAT and connection tracking | [3022](https://www.rfc-editor.org/rfc/rfc3022) | [`cpp/nat-conntrack`](cpp/nat-conntrack) |
+| 37 | GTP-U / GTP-C | 3GPP TS 29.281, 29.274 | [`cpp/gtp`](cpp/gtp) |
+| 38 | SCTP | [9260](https://www.rfc-editor.org/rfc/rfc9260) | [`cpp/sctp`](cpp/sctp) |
+| 39 | PFCP | 3GPP TS 29.244 | [`cpp/pfcp`](cpp/pfcp) |
+| 40 | ASN.1 PER | ITU-T X.691 | [`cpp/asn1-per`](cpp/asn1-per) |
+| 41 | Longest-prefix-match FIB | none (data structures) | [`cpp/lpm-fib`](cpp/lpm-fib) |
+| 42 | NAT and connection tracking | [3022](https://www.rfc-editor.org/rfc/rfc3022) | [`cpp/nat-conntrack`](cpp/nat-conntrack) |
 
 ## What each protocol is about
 
@@ -144,80 +143,94 @@ roles. *Verify with:* FRR, Wireshark.
 **14. SNMP v2c.** An agent with a few OIDs and a manager that does GET, GETNEXT and WALK, including BER
 encoding. *Verify with:* `snmpwalk`, `snmpget`.
 
-**15. sFlow v5 / IPFIX.** A datagram collector that aggregates flows and stores them in ClickHouse. *Verify with:* `hsflowd`, `softflowd`.
-
-**16. Syslog.** A UDP and TCP receiver, a parser, an index and simple queries. *Verify with:* `logger`,
+**15. Syslog.** A UDP and TCP receiver, a parser, an index and simple queries. *Verify with:* `logger`,
 `rsyslog`.
 
-**17. RADIUS.** A server for Access-Request, Accept and Reject, attributes, Message-Authenticator and
+**16. RADIUS.** A server for Access-Request, Accept and Reject, attributes, Message-Authenticator and
 accounting. The authentication backbone of ISPs and Wi-Fi networks. *Verify with:* `radtest`, `eapol_test`.
 
-**18. SIP + SDP.** A parser, REGISTER with digest authentication, the INVITE / 200 / ACK / BYE flow, user
+**17. SIP + SDP.** A parser, REGISTER with digest authentication, the INVITE / 200 / ACK / BYE flow, user
 location and call routing. *Verify with:* SIPp, Linphone, Wireshark.
 
-**19. RTP / RTCP.** A receiver with a jitter buffer, loss and jitter statistics and a simple RTP relay.
+**18. RTP / RTCP.** A receiver with a jitter buffer, loss and jitter statistics and a simple RTP relay.
 *Verify with:* SIPp (media), `ffmpeg`, Wireshark.
 
-**20. MQTT 3.1.1 / 5.0.** A broker with CONNECT, PUBLISH, SUBSCRIBE, QoS 0 and 1, and retained messages.
+**19. MQTT 3.1.1 / 5.0.** A broker with CONNECT, PUBLISH, SUBSCRIBE, QoS 0 and 1, and retained messages.
 *Verify with:* `mosquitto_pub`, `mosquitto_sub`.
 
-**21. BFD.** Tiny hello packets that detect a dead link in milliseconds. BGP and OSPF use it as a fast failure
+**20. BFD.** Tiny hello packets that detect a dead link in milliseconds. BGP and OSPF use it as a fast failure
 detector. Go first, then C++ for the timer-sensitive path. *Verify with:* FRR (`bfdd`), BIRD, Wireshark.
 
-**22. LLDP.** How switches, routers and access points announce themselves to the device on the other end of a
+**21. LLDP.** How switches, routers and access points announce themselves to the device on the other end of a
 cable. This is how a controller builds its topology map. *Verify with:* `lldpd`, `tcpdump`.
 
-**23. IS-IS.** The second great link-state routing protocol, common in ISP backbones. Runs directly over Ethernet.
+**22. IS-IS.** The second great link-state routing protocol, common in ISP backbones. Runs directly over Ethernet.
 Reuses the shortest-path code from OSPF. *Verify with:* FRR (`isisd`), Wireshark.
 
-**24. VRRP.** Routers share one virtual gateway address and a backup takes over when the master dies.
+**23. VRRP.** Routers share one virtual gateway address and a backup takes over when the master dies.
 *Verify with:* `keepalived`, Wireshark.
 
-**25. ARP and ICMP tools.** `arping`, `ping` and `traceroute` over raw sockets, in Go. The Rust parser in item 6
+**24. ARP and ICMP tools.** `arping`, `ping` and `traceroute` over raw sockets, in Go. The Rust parser in item 6
 covers the same headers from the packet-parsing side. *Verify with:* `arping`, `ping`, `tcpdump`.
 
-**26. mDNS and DNS-SD.** DNS without a server, over multicast. This is how a controller finds devices on a local
+**25. mDNS and DNS-SD.** DNS without a server, over multicast. This is how a controller finds devices on a local
 network. Reuses the codec from item 4. *Verify with:* `avahi-browse`, `dns-sd`.
 
-**27. PPPoE.** How a home customer connects to an ISP over Ethernet: discovery, PPP, LCP, authentication and
-address assignment. Authenticates against item 17. *Verify with:* `pppd` in a network namespace.
+**26. PPPoE.** How a home customer connects to an ISP over Ethernet: discovery, PPP, LCP, authentication and
+address assignment. Authenticates against item 16. *Verify with:* `pppd` in a network namespace.
 
-**28. RPKI-to-Router.** How a router learns which AS may announce which prefix, and the origin validation that
+**27. RPKI-to-Router.** How a router learns which AS may announce which prefix, and the origin validation that
 uses it. Hooks into item 12. *Verify with:* Routinator, StayRTR.
 
-**29. Diameter.** The AAA protocol of mobile networks, successor of RADIUS. *Verify with:* freeDiameter, Wireshark.
+**28. Diameter.** The AAA protocol of mobile networks, successor of RADIUS. *Verify with:* freeDiameter, Wireshark.
 
-**30. TURN.** A relay for clients behind NAT. Completes item 8. *Verify with:* `coturn`, Wireshark.
+**29. TURN.** A relay for clients behind NAT. Completes item 8. *Verify with:* `coturn`, Wireshark.
 
-**31. NETCONF.** Configuring network devices with XML RPCs over SSH, the base of network automation.
+**30. NETCONF.** Configuring network devices with XML RPCs over SSH, the base of network automation.
 *Verify with:* `netopeer2`, `ncclient`.
 
-**32. HTTP/2.** Binary framing, HPACK header compression and multiplexed streams, over cleartext (h2c) first.
+**31. HTTP/2.** Binary framing, HPACK header compression and multiplexed streams, over cleartext (h2c) first.
 *Verify with:* `curl --http2-prior-knowledge`, `h2spec`, `nghttp`.
 
-**33. gRPC.** Length-prefixed messages over HTTP/2 streams with status in the trailers, built on item 32.
+**32. gRPC.** Length-prefixed messages over HTTP/2 streams with status in the trailers, built on item 31.
 *Verify with:* `grpcurl`, a grpc-go client.
 
-**34. RESP.** The Redis protocol and a small server that speaks it: stream parsing, pipelining, many connections.
+**33. RESP.** The Redis protocol and a small server that speaks it: stream parsing, pipelining, many connections.
 *Verify with:* `redis-cli`, `redis-benchmark`.
 
-**35. L4 load balancer.** A TCP and UDP balancer with several algorithms, health checks and connection draining.
+**34. L4 load balancer.** A TCP and UDP balancer with several algorithms, health checks and connection draining.
 *Verify with:* `curl`, `wrk`, `iperf3`.
 
-**36. L7 reverse proxy.** A Rust proxy with routing, upstream pools and health checks. Pairs with item 35.
+**35. L7 reverse proxy.** A Rust proxy with routing, upstream pools and health checks. Pairs with item 34.
 *Verify with:* `curl`, `wrk`.
 
-**37. WireGuard-style tunnel.** A Noise handshake, encrypted transport packets and a TUN device. Builds on the
+**36. WireGuard-style tunnel.** A Noise handshake, encrypted transport packets and a TUN device. Builds on the
 tunnel idea from item 11. *Verify with:* `wg` in two network namespaces.
 
-**38 to 41. Mobile core.** GTP tunnels, SCTP, PFCP and ASN.1 PER decoding: the protocols between a base station
+**37 to 40. Mobile core.** GTP tunnels, SCTP, PFCP and ASN.1 PER decoding: the protocols between a base station
 and the core network. *Verify with:* Open5GS, free5GC, Wireshark.
 
-**42. Longest-prefix-match FIB.** A trie and a DIR-24-8 table for IP lookup, benchmarked against each other.
+**41. Longest-prefix-match FIB.** A trie and a DIR-24-8 table for IP lookup, benchmarked against each other.
 *Verify with:* a routing table dump (RIPE RIS), a benchmark.
 
-**43. NAT and connection tracking.** Flow table, address and port translation with checksum updates.
+**42. NAT and connection tracking.** Flow table, address and port translation with checksum updates.
 *Verify with:* `conntrack`, `iptables` in a network namespace.
+
+## Protocols in more than one language
+
+Some protocols appear in two languages on purpose. The rule: write the Go version first as the reference, then
+port it to Rust or C++ using the same captured packets from `testdata/pcap/`, so the two can be compared on
+correctness, speed and memory. A port counts as done only when it passes the same test vectors.
+
+| Protocol | Go | Rust | C++ | How they differ |
+|---|---|---|---|---|
+| DNS | [`go/dns`](go/dns) | [`rust/dns-rust`](rust/dns-rust) | | Rust is the port of the Go server and resolver. |
+| HTTP/2 | [`go/http2`](go/http2) | [`rust/http2`](rust/http2) | | Go first (gRPC builds on it); the Rust port comes later. |
+| BFD | [`go/bfd`](go/bfd) | | [`cpp/bfd`](cpp/bfd) | C++ for the timing-sensitive path, after Go works. |
+| Diameter | [`go/diameter`](go/diameter) | | [`cpp/diameter`](cpp/diameter) | Same protocol; pick one first, port only if time allows. |
+| ARP and ICMP | [`go/arp`](go/arp), [`go/icmp`](go/icmp) | [`rust/packet-parser`](rust/packet-parser) | | Go: tools over raw sockets. Rust: header parsing and pcap files. |
+| Load balancing | [`go/l4-loadbalancer`](go/l4-loadbalancer) | [`rust/reverse-proxy`](rust/reverse-proxy) | | Different layers: L4 in Go, L7 in Rust. |
+| Tunnels | [`go/wireguard`](go/wireguard) | [`rust/gre-vxlan`](rust/gre-vxlan) | | Different protocols, same TUN technique. |
 
 ## Libraries used instead of writing from scratch
 
@@ -226,8 +239,8 @@ and the core network. *Verify with:* Open5GS, free5GC, Wireshark.
 | QUIC and HTTP/3 | `quic-go`, `quinn` | A huge specification. Item 10 teaches the core ideas. |
 | TLS | `crypto/tls`, `rustls` | Never write your own cryptography. |
 | SSH and NETCONF | `golang.org/x/crypto/ssh`, `russh` | Cryptography. Focus on the client and automation. |
-| gRPC in production, gNMI | `grpc-go`, `tonic` | Item 33 builds the transport; production services use the library. |
-| WireGuard / Noise | `golang.org/x/crypto`, `wireguard-go` | Item 37 writes the protocol and tunnel; the primitives come from the library. |
+| gRPC in production, gNMI | `grpc-go`, `tonic` | Item 32 builds the transport; production services use the library. |
+| WireGuard / Noise | `golang.org/x/crypto`, `wireguard-go` | Item 36 writes the protocol and tunnel; the primitives come from the library. |
 
 ## Definition of done for a protocol
 
