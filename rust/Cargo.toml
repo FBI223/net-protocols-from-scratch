@@ -6,4 +6,6 @@ members = [
     "tls-clienthello",
     "gre-vxlan",
     "dns-rust",
+    "reverse-proxy",
+    "http2",
 ]

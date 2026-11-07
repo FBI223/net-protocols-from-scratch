@@ -1,8 +1,8 @@
-//! Do zaimplementowania. Opis i kryteria gotowości w README.
+//! Opis i kryteria gotowości w README.
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    #[ignore = "do zaimplementowania"]
-    fn placeholder() {}
-}
+pub mod client_hello;
+pub mod extensions;
+pub mod handshake;
+pub mod ja3;
+pub mod reader;
+pub mod record;
