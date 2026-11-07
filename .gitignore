@@ -91,3 +91,6 @@ testdata/fuzz/*/corpus/
 # ---------- System ----------
 .DS_Store
 Thumbs.db
+
+# ---------- C++ (CMake) ----------
+cpp/build*/
