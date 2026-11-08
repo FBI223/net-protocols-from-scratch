@@ -1,35 +1,38 @@
 #!/usr/bin/env bash
 #
-# check-build.sh - sprawdza zaleznosci i budowanie projektow Go / Rust / C++ w repo.
-# Wymaga zainstalowanych toolchainow (go, cargo, cmake + kompilator); brakujace pomija.
-# Repo zostaje nietkniete: build C++ idzie do katalogu tymczasowego, target/ Rusta do
-# ~/.cache/repo-checks/ (mozna zmienic przez CARGO_TARGET_DIR), a go.mod/go.sum sa po
-# kontroli 'go mod tidy' przywracane (na Go >= 1.23 uzywane jest 'go mod tidy -diff').
+# check-build.sh - checks dependencies and builds of the Go / Rust / C++ projects in a repo
+# and reports how many tests really ran (so skipped or empty tests do not look like success).
+# Needs the toolchains (go, cargo, cmake + a compiler); missing ones are skipped.
+# The repo is left untouched: the C++ build goes to a temp directory, Rust's target/ goes to
+# ~/.cache/repo-checks/ (override with CARGO_TARGET_DIR), and go.mod/go.sum are restored after
+# the 'go mod tidy' check (Go >= 1.23 uses 'go mod tidy -diff').
 #
-# Uzycie:
-#   ./check-build.sh [opcje] [sciezka-do-repo]     (domyslnie: biezacy katalog)
+# Usage:
+#   ./check-build.sh [options] [path-to-repo]     (default: current directory)
 #
-# Opcje:
-#   --only go,rust,cpp   sprawdz tylko wybrane jezyki
-#   --skip-tests         nie uruchamiaj testow (testy sieciowe moga wymagac portow/uprawnien)
-#   --clippy             dodatkowo cargo clippy -D warnings
-#   --vuln               dodatkowo govulncheck / cargo audit (jesli zainstalowane)
-#   --write-locks        pozwol cargo zostawic nowo wygenerowane Cargo.lock w repo (domyslnie sa usuwane)
-#   --timeout SEC        limit czasu pojedynczego kroku (domyslnie 600)
-#   --jobs N             rownoleglosc budowania C++ (domyslnie: liczba rdzeni)
-#   -v, --verbose        pokaz pelny output kazdego kroku
-#   --no-color           wylacz kolory
-#   -h, --help           ta pomoc
+# Options:
+#   --only go,rust,cpp   check only the selected languages
+#   --skip-tests         do not run tests (network tests may need ports/privileges)
+#   --clippy             also run cargo clippy -D warnings
+#   --vuln               also run govulncheck / cargo audit (if installed)
+#   --write-locks        let cargo leave newly generated Cargo.lock files in the repo (default: removed)
+#   --timeout SEC        time limit of a single step (default 600)
+#   --jobs N             C++ build parallelism (default: number of cores)
+#   -v, --verbose        show the full output of every step
+#   --no-color           disable colors
+#   -h, --help           this help
 #
-# Kod wyjscia: 0 = wszystko ok, 1 = sa bledy, 2 = zly argument.
+# Exit code: 0 = all good, 1 = errors, 2 = bad argument.
 #
-# Co sprawdza:
-#   Go    : wersja z go.mod vs lokalna, go mod tidy (czy go.mod/go.sum sa aktualne),
-#           go mod verify, go build ./..., go vet ./..., gofmt, go test ./...
-#   Rust  : cargo metadata (czy kazdy crate nalezy do workspace, sciezki path= w repo),
-#           cargo fmt --check, cargo check --locked (aktualny Cargo.lock), cargo test
-#   C++   : cmake configure + build kazdego glownego CMakeLists.txt (z -Wall -Wextra),
-#           liczba ostrzezen kompilatora, ctest (i ostrzezenie, gdy testow brak)
+# What it checks:
+#   Go    : go.mod version vs local, go mod tidy (go.mod/go.sum up to date), go mod verify,
+#           go build ./..., go vet ./..., gofmt, go test ./... (passed / skipped / failed counts,
+#           warns about skipped placeholder tests)
+#   Rust  : cargo metadata (every crate belongs to a workspace, path= dependencies inside the repo),
+#           cargo fmt --check, cargo check --locked (up-to-date Cargo.lock), cargo test
+#           (passed / ignored counts, warns when zero tests ran)
+#   C++   : cmake configure + build of every root CMakeLists.txt (with -Wall -Wextra),
+#           compiler warning count, ctest (warns when there are no tests)
 
 set -uo pipefail
 
@@ -48,7 +51,7 @@ USE_COLOR=1
 [[ -n "${NO_COLOR:-}" ]] && USE_COLOR=0
 ROOT_ARG="."
 
-need_arg() { [[ $# -ge 2 ]] || { echo "$1 wymaga argumentu" >&2; exit 2; }; }
+need_arg() { [[ $# -ge 2 ]] || { echo "$1 needs an argument" >&2; exit 2; }; }
 while (($#)); do
   case "$1" in
     --only) need_arg "$@"; ONLY="$2"; shift ;;
@@ -61,20 +64,20 @@ while (($#)); do
     -v|--verbose) VERBOSE=1 ;;
     --no-color) USE_COLOR=0 ;;
     -h|--help) usage; exit 0 ;;
-    -*) echo "Nieznana opcja: $1 (uzyj --help)" >&2; exit 2 ;;
+    -*) echo "Unknown option: $1 (use --help)" >&2; exit 2 ;;
     *) ROOT_ARG="$1" ;;
   esac
   shift
 done
 
-[[ "$TIMEOUT" =~ ^[0-9]+$ ]] || { echo "--timeout wymaga liczby sekund" >&2; exit 2; }
-RESOLVED=$(cd "$ROOT_ARG" 2>/dev/null && pwd -P) || { echo "Nie ma takiego katalogu: $ROOT_ARG" >&2; exit 2; }
+[[ "$TIMEOUT" =~ ^[0-9]+$ ]] || { echo "--timeout needs a number of seconds" >&2; exit 2; }
+RESOLVED=$(cd "$ROOT_ARG" 2>/dev/null && pwd -P) || { echo "No such directory: $ROOT_ARG" >&2; exit 2; }
 ROOT="$RESOLVED"
 ROOT_ESC=$(printf '%s' "$ROOT" | sed 's/[][\.*^$#/]/\\&/g')
 IS_TTY=0; [[ -t 1 ]] && IS_TTY=1
-# logi krokow sa przechwytywane, wiec kolorow narzedzi nie chcemy
+# step logs are captured, so we do not want tool colors
 export CARGO_TERM_COLOR=never NO_COLOR=1
-# target/ Rusta ma trafiac poza repo (repo zostaje czyste), ale do trwalego cache, zeby kolejne uruchomienia byly szybkie
+# Rust's target/ goes outside the repo (the repo stays clean) but into a persistent cache so later runs are fast
 if [[ -z "${CARGO_TARGET_DIR:-}" ]]; then
   CACHE_KEY=$(printf '%s' "$ROOT" | cksum | cut -d' ' -f1)
   export CARGO_TARGET_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/repo-checks/cargo-target-$CACHE_KEY"
@@ -97,8 +100,10 @@ else
 fi
 
 N_OK=0; N_WARN=0; N_FAIL=0; N_SKIP=0
+GO_PASS=0; GO_SKIPPED=0; GO_FAILED=0; RS_PASS=0; RS_IGNORED=0; RS_FAILED=0; TESTS_RAN=0
 FAILED=()
 CTX="repo"
+TAIL_FILTER=""
 ok()   { N_OK=$((N_OK + 1));     printf '  %s[ OK ]%s %s\n' "$C_GRN" "$C_RST" "$*"; }
 warn() { N_WARN=$((N_WARN + 1)); printf '  %s[WARN]%s %s\n' "$C_YEL" "$C_RST" "$*"; }
 fail() { N_FAIL=$((N_FAIL + 1)); printf '  %s[FAIL]%s %s\n' "$C_RED" "$C_RST" "$*"; }
@@ -117,7 +122,7 @@ restore_go() {
   if [[ -f "$RESTORE_BK/go.sum" ]]; then cp "$RESTORE_BK/go.sum" "$RESTORE_DIR/go.sum"; else rm -f "$RESTORE_DIR/go.sum"; fi
   RESTORE_DIR=""
 }
-# shellcheck disable=SC2329  # wywolywana przez trap
+# shellcheck disable=SC2329  # invoked by the trap
 cleanup() {
   restore_go
   local l
@@ -132,11 +137,11 @@ LAST_LOG=""
 
 net_hint() {
   grep -qEi 'could not resolve|failed to download|timed out|dial tcp|no such host|network|Temporary failure|proxy' "$LAST_LOG" 2>/dev/null &&
-    detail "wyglada na problem z siecia: pierwsze budowanie pobiera zaleznosci (sprawdz polaczenie / proxy)"
+    detail "looks like a network problem: the first build downloads dependencies (check your connection / proxy)"
   return 0
 }
 
-# run_step LABEL DIR CMD...  -> 0 gdy ok; na bledzie wypisuje koniec logu
+# run_step LABEL DIR CMD...  -> 0 when ok; on failure prints the end of the log
 run_step() {
   local label="$1" dir="$2"; shift 2
   LOGN=$((LOGN + 1)); LAST_LOG="$TMPD/log.$LOGN"
@@ -154,29 +159,71 @@ run_step() {
     ((VERBOSE)) && sed 's/^/           | /' "$LAST_LOG"
     return 0
   fi
-  if ((rc == 124)); then fail "$label: przekroczono limit ${TIMEOUT}s"; else fail "$label (kod $rc, ${dt}s)"; fi
+  if ((rc == 124)); then fail "$label: exceeded the ${TIMEOUT}s limit"; else fail "$label (exit code $rc, ${dt}s)"; fi
   FAILED+=("$CTX: $label")
-  tail -n 25 "$LAST_LOG" | sed "s#${ROOT_ESC}/##g" | cut -c1-160 | sed 's/^/           | /'
+  if [[ -n "$TAIL_FILTER" ]] && grep -qE -- "$TAIL_FILTER" "$LAST_LOG"; then
+    grep -E -A3 -- "$TAIL_FILTER" "$LAST_LOG" | head -n 40 | sed "s#${ROOT_ESC}/##g" | cut -c1-160 | sed 's/^/           | /'
+  else
+    tail -n 25 "$LAST_LOG" | sed "s#${ROOT_ESC}/##g" | cut -c1-160 | sed 's/^/           | /'
+  fi
   net_hint
   return "$rc"
 }
 
-find_manifests() { # nazwa -> sciezki bezwzgledne, plytsze najpierw
+find_manifests() { # name -> absolute paths, shallower first
   find "$ROOT" \( -name .git -o -name target -o -name node_modules -o -name vendor -o -name testdata \
       -o -name build -o -name 'cmake-build-*' \) -prune -o -type f -name "$1" -print \
     | awk '{ n = gsub("/", "/"); printf "%d\t%s\n", n, $0 }' | LC_ALL=C sort -t "$(printf '\t')" -k1,1n -k2,2 | cut -f2-
 }
-has_bin() { # katalog crate'a/workspace zawiera binarke?
+has_bin() { # does the crate/workspace directory contain a binary?
   [[ -f "$1/src/main.rs" ]] || grep -qE '^\[\[bin\]\]' "$1/Cargo.toml" 2>/dev/null \
     || find "$1" -maxdepth 3 -path '*/src/main.rs' -not -path '*/target/*' 2>/dev/null | grep -q .
 }
 rel_of() { local r="${1#"$ROOT"}"; r="${r#/}"; printf '%s' "${r:-.}"; }
 inside_root() { [[ "$1" == "$ROOT" || "$1" == "$ROOT"/* ]]; }
 
+# --- test summaries (read LAST_LOG of the test step) -------------------------
+summarize_go_tests() { # rc of the test step
+  local rc="$1" p f s ph reasons l
+  p=$(grep -c '^--- PASS' "$LAST_LOG" || true)
+  f=$(grep -c '^--- FAIL' "$LAST_LOG" || true)
+  s=$(grep -c '^--- SKIP' "$LAST_LOG" || true)
+  ph=$(grep -c '^--- SKIP: TestPlaceholder' "$LAST_LOG" || true)
+  GO_PASS=$((GO_PASS + p)); GO_SKIPPED=$((GO_SKIPPED + s)); GO_FAILED=$((GO_FAILED + f)); TESTS_RAN=1
+  info "Go tests: $p passed, $s skipped, $f failed (top-level tests and fuzz seed corpora)"
+  if ((rc == 0 && p == 0)); then
+    warn "no Go test passed: the test files are empty or every test is skipped"
+  fi
+  if ((ph > 0)); then
+    warn "$ph placeholder tests (TestPlaceholder) are skipped: replace them with real tests"
+  fi
+  if ((s > ph)); then
+    reasons=$(grep -B1 '^--- SKIP' "$LAST_LOG" | grep -E '^ +[^ ]+:[0-9]+: ' | sed -E 's/^ +[^ :]+:[0-9]+: //' | sort | uniq -c | sort -rn | head -n 5)
+    if [[ -n "$reasons" ]]; then
+      printf '           skip reasons:\n'
+      while IFS= read -r l; do printf '             %s\n' "$l"; done <<<"$reasons"
+    fi
+  fi
+  return 0
+}
+
+summarize_rust_tests() { # rc of the test step
+  local rc="$1" p f i tg
+  read -r p f i tg _ < <(awk '
+    /^test result:/ { p += $4; f += $6; i += $8; tg++; if ($4 + $8 == 0) zero++ }
+    END { printf "%d %d %d %d %d\n", p + 0, f + 0, i + 0, tg + 0, zero + 0 }' "$LAST_LOG")
+  RS_PASS=$((RS_PASS + p)); RS_IGNORED=$((RS_IGNORED + i)); RS_FAILED=$((RS_FAILED + f)); TESTS_RAN=1
+  info "Rust tests: $p passed, $f failed, $i ignored (in $tg test targets)"
+  if ((rc == 0 && p == 0)); then
+    warn "0 Rust tests ran: all $tg test targets are empty (add #[test] functions; an empty tests/*.rs file always 'passes')"
+  fi
+  return 0
+}
+
 printf '%sRepo:%s %s\n' "$C_BLD" "$C_RST" "$ROOT"
-printf 'Narzedzia: go=%s cargo=%s cmake=%s  (jobs=%s, timeout=%ss%s)\n' \
-  "$(have go && echo tak || echo nie)" "$(have cargo && echo tak || echo nie)" "$(have cmake && echo tak || echo nie)" \
-  "$JOBS" "$TIMEOUT" "$( ((SKIP_TESTS)) && echo ', bez testow' || true)"
+printf 'Tools: go=%s cargo=%s cmake=%s  (jobs=%s, timeout=%ss%s)\n' \
+  "$(have go && echo yes || echo no)" "$(have cargo && echo yes || echo no)" "$(have cmake && echo yes || echo no)" \
+  "$JOBS" "$TIMEOUT" "$( ((SKIP_TESTS)) && echo ', tests skipped' || true)"
 
 # ==========================================================================
 # GO
@@ -185,37 +232,37 @@ if wants go; then
   section "Go"
   readarray -t GOMODS < <(find_manifests go.mod)
   if ((${#GOMODS[@]} == 0)); then
-    info "brak go.mod w repo"
+    info "no go.mod in the repo"
   elif ! have go; then
-    skip "go nie jest zainstalowany: pomijam ${#GOMODS[@]} modulow"
+    skip "go is not installed: skipping ${#GOMODS[@]} modules"
   else
     GO_LOCAL=$(go env GOVERSION 2>/dev/null); GO_LOCAL="${GO_LOCAL#go}"
     HAS_TIDY_DIFF=0
     go help mod tidy 2>&1 | grep -q -- '-diff' && HAS_TIDY_DIFF=1
-    [[ "${CHECK_BUILD_FORCE_TIDY_FALLBACK:-0}" == 1 ]] && HAS_TIDY_DIFF=0 # tylko do testow skryptu
+    [[ "${CHECK_BUILD_FORCE_TIDY_FALLBACK:-0}" == 1 ]] && HAS_TIDY_DIFF=0 # for testing the script only
     for gm in "${GOMODS[@]}"; do
       dir=$(dirname "$gm"); rel=$(rel_of "$dir")
       mpath=$(awk '/^module[ \t]/ { gsub(/"/, "", $2); print $2; exit }' "$gm")
       CTX="go:$rel"
-      subsection "modul ${mpath:-?} (${rel})"
+      subsection "module ${mpath:-?} (${rel})"
 
       need=$(awk '/^go[ \t]+[0-9]/ { print $2; exit }' "$gm")
       if [[ -n "$need" && -n "$GO_LOCAL" && "$(printf '%s\n%s\n' "$need" "$GO_LOCAL" | sort -V | head -n1)" != "$need" ]]; then
-        warn "go.mod wymaga go $need, lokalnie jest $GO_LOCAL (go moze pobrac nowszy toolchain albo build sie nie uda)"
+        warn "go.mod needs go $need, local Go is $GO_LOCAL (Go may download a newer toolchain or the build may fail)"
       fi
 
-      # lokalne replace wychodzace poza repo
+      # local replace directives leaving the repo
       while IFS= read -r line; do
         tgt=$(sed -E 's/.*=>[[:space:]]*([^[:space:]]+).*/\1/' <<<"$line")
         abs=$(realpath -m "$dir/$tgt" 2>/dev/null || echo "$dir/$tgt")
-        if ! inside_root "$abs"; then fail "replace => $tgt wskazuje poza repo (po rozdzieleniu repo przestanie dzialac)"; FAILED+=("$CTX: replace poza repo")
-        elif [[ ! -d "$abs" ]]; then fail "replace => $tgt: katalog nie istnieje"; FAILED+=("$CTX: replace nie istnieje"); fi
+        if ! inside_root "$abs"; then fail "replace => $tgt points outside the repo (it will break once the repo is split)"; FAILED+=("$CTX: replace outside the repo")
+        elif [[ ! -d "$abs" ]]; then fail "replace => $tgt: directory does not exist"; FAILED+=("$CTX: replace target missing"); fi
       done < <(grep -E '=>[[:space:]]*\.{1,2}/' "$gm" || true)
 
-      # go mod tidy: czy go.mod/go.sum sa aktualne
+      # go mod tidy: are go.mod/go.sum up to date
       if ((HAS_TIDY_DIFF)); then
-        run_step "go mod tidy -diff (go.mod/go.sum aktualne)" "$dir" go mod tidy -diff \
-          || detail "napraw: (cd $rel && go mod tidy)"
+        run_step "go mod tidy -diff (go.mod/go.sum up to date)" "$dir" go mod tidy -diff \
+          || detail "fix: (cd $rel && go mod tidy)"
       else
         RESTORE_BK="$TMPD/tidy.$((LOGN + 1))"; mkdir -p "$RESTORE_BK"
         cp "$dir/go.mod" "$RESTORE_BK/go.mod"; [[ -f "$dir/go.sum" ]] && cp "$dir/go.sum" "$RESTORE_BK/go.sum"
@@ -229,41 +276,45 @@ if wants go; then
         elif [[ -f "$dir/go.sum" ]]; then changed=1; fi
         restore_go
         if ((trc != 0)); then
-          fail "go mod tidy nie przeszlo (kod $trc)"; FAILED+=("$CTX: go mod tidy")
+          fail "go mod tidy failed (exit code $trc)"; FAILED+=("$CTX: go mod tidy")
           tail -n 15 "$LAST_LOG" | sed "s#${ROOT_ESC}/##g" | cut -c1-160 | sed 's/^/           | /'
           net_hint
         elif ((changed)); then
-          fail "go.mod/go.sum nie sa w stanie 'tidy' (zmiany cofniete)"; FAILED+=("$CTX: go mod tidy")
-          detail "napraw: (cd $rel && go mod tidy)"
+          fail "go.mod/go.sum are not tidy (changes were reverted)"; FAILED+=("$CTX: go mod tidy")
+          detail "fix: (cd $rel && go mod tidy)"
         else
-          ok "go mod tidy: go.mod/go.sum aktualne"
+          ok "go mod tidy: go.mod/go.sum up to date"
         fi
       fi
 
       run_step "go mod verify" "$dir" go mod verify
       run_step "go build ./..." "$dir" go build ./... \
-        || detail "typowe po rozdzieleniu repo: 'use of internal package ... not allowed' lub import ze starej sciezki modulu"
+        || detail "typical after splitting a repo: 'use of internal package ... not allowed' or an import of the old module path"
       run_step "go vet ./..." "$dir" go vet ./...
 
       unformatted=$(cd "$dir" && gofmt -l . 2>&1 | grep -v '^$' || true)
       if [[ -n "$unformatted" ]]; then
         readarray -t _uf <<<"$unformatted"
-        warn "${#_uf[@]} plikow bez gofmt (napraw: (cd $rel && gofmt -w .))"
+        warn "${#_uf[@]} files are not gofmt-ed (fix: (cd $rel && gofmt -w .))"
         detail "$(printf '%s, ' "${_uf[@]:0:15}" | sed 's/, $//')"
       else
-        ok "gofmt: brak uwag"
+        ok "gofmt: no issues"
       fi
 
       if ((SKIP_TESTS)); then
         skip "go test (--skip-tests)"
       else
-        run_step "go test ./..." "$dir" go test ./... -count=1 -timeout 120s \
-          || detail "jesli to testy sieciowe: moga wymagac wolnych portow/uprawnien (sprobuj --skip-tests)"
+        TAIL_FILTER='^[[:space:]]*--- FAIL|^FAIL|^panic:'
+        trc=0
+        run_step "go test ./..." "$dir" go test ./... -count=1 -timeout 120s -v || trc=$?
+        TAIL_FILTER=""
+        ((trc != 0)) && detail "if these are network tests: they may need free ports/privileges (try --skip-tests)"
+        summarize_go_tests "$trc"
       fi
 
       if ((VULN)); then
         if have govulncheck; then run_step "govulncheck ./..." "$dir" govulncheck ./...
-        else skip "govulncheck niezainstalowany (go install golang.org/x/vuln/cmd/govulncheck@latest)"; fi
+        else skip "govulncheck is not installed (go install golang.org/x/vuln/cmd/govulncheck@latest)"; fi
       fi
     done
   fi
@@ -276,9 +327,9 @@ if wants rust; then
   section "Rust"
   readarray -t CARGOS < <(find_manifests Cargo.toml)
   if ((${#CARGOS[@]} == 0)); then
-    info "brak Cargo.toml w repo"
+    info "no Cargo.toml in the repo"
   elif ! have cargo; then
-    skip "cargo nie jest zainstalowany: pomijam ${#CARGOS[@]} manifestow"
+    skip "cargo is not installed: skipping ${#CARGOS[@]} manifests"
   else
     declare -A COVERED=() WSDONE=() SEEN_ERR=()
     if ((!WRITE_LOCKS)); then
@@ -296,16 +347,16 @@ if wants rust; then
         subsection "crate $rel"
         errsum=$(cksum < "$meta.err" | cut -d' ' -f1)
         if [[ -n "${SEEN_ERR[$errsum]:-}" ]]; then
-          skip "ten sam blad workspace co dla ${SEEN_ERR[$errsum]} (nie powtarzam)"
+          skip "same workspace error as for ${SEEN_ERR[$errsum]} (not repeated)"
           continue
         fi
         SEEN_ERR["$errsum"]="$rel"
-        fail "cargo metadata nie przeszlo"; FAILED+=("$CTX: cargo metadata")
+        fail "cargo metadata failed"; FAILED+=("$CTX: cargo metadata")
         head -n 8 "$meta.err" | sed "s#${ROOT_ESC}/##g" | cut -c1-160 | sed 's/^/           | /'
         if grep -q "believes it's in a workspace when it's not" "$meta.err"; then
-          detail "ten crate lezy pod katalogiem workspace, ale nie jest w jego 'members': dodaj go do members (lub do exclude), albo daj mu wlasne puste [workspace] w Cargo.toml"
+          detail "this crate lives under a workspace directory but is not listed in its 'members': add it to members (or exclude), or give it its own empty [workspace] in Cargo.toml"
         elif grep -q 'failed to load manifest for dependency\|failed to read .*Cargo.toml' "$meta.err"; then
-          detail "zaleznosc path=... wskazuje na nieistniejacy katalog (po rozdzieleniu repo czesto poza repo): popraw sciezke, przenies crate do repo albo uzyj wersji z crates.io / git"
+          detail "a path=... dependency points to a missing directory (often outside the repo after a split): fix the path, move the crate into the repo, or use a crates.io / git version"
         fi
         continue
       fi
@@ -314,15 +365,15 @@ if wants rust; then
       wsroot=$(grep -o '"workspace_root":"[^"]*"' "$meta" | head -n1 | sed 's/"workspace_root":"//; s/"$//')
       [[ -z "$wsroot" ]] && wsroot=$(dirname "$cm")
 
-      # zaleznosci path=... wychodzace poza repo
+      # path=... dependencies leaving the repo
       while IFS= read -r dp; do
         [[ -z "$dp" ]] && continue
         if ! inside_root "$dp"; then
           subsection "crate $rel"
-          fail "zaleznosc path wskazuje poza repo: $dp (po rozdzieleniu repo przestanie dzialac)"; FAILED+=("$CTX: path dep poza repo")
+          fail "path dependency points outside the repo: $dp (it will break once the repo is split)"; FAILED+=("$CTX: path dependency outside the repo")
         elif [[ ! -e "$dp" ]]; then
           subsection "crate $rel"
-          fail "zaleznosc path nie istnieje: $dp"; FAILED+=("$CTX: path dep nie istnieje")
+          fail "path dependency does not exist: $dp"; FAILED+=("$CTX: path dependency missing")
         fi
       done < <(grep -o '"path":"[^"]*"' "$meta" | sed 's/"path":"//; s/"$//' | sort -u)
 
@@ -331,7 +382,7 @@ if wants rust; then
 
     if ((${#WS_ROOTS[@]} >= 3)); then
       has_root=0; for ws in "${WS_ROOTS[@]}"; do [[ "$ws" == "$ROOT" ]] && has_root=1; done
-      ((has_root)) || info "${#WS_ROOTS[@]} osobnych crate'ow bez wspolnego workspace: rozwaz Cargo.toml z [workspace] members=[...] w roocie (jeden Cargo.lock, wspolny target, jedno cargo test)"
+      ((has_root)) || info "${#WS_ROOTS[@]} separate crates without a shared workspace: consider a root Cargo.toml with [workspace] members=[...] (one Cargo.lock, one target, one cargo test)"
     fi
     for ws in ${WS_ROOTS[@]+"${WS_ROOTS[@]}"}; do
       rel=$(rel_of "$ws")
@@ -340,32 +391,34 @@ if wants rust; then
       lock=()
       if [[ -f "$ws/Cargo.lock" ]]; then lock=(--locked)
       elif has_bin "$ws"; then
-        warn "brak Cargo.lock w $rel (to aplikacja/binarka: zacommituj go; wygeneruj: cargo generate-lockfile)"
+        warn "no Cargo.lock in $rel (an application/binary: commit it; generate with: cargo generate-lockfile)"
       else
-        info "brak Cargo.lock w $rel (dla samej biblioteki to dopuszczalne; --locked pominiete)"
+        info "no Cargo.lock in $rel (fine for a pure library; --locked skipped)"
       fi
 
       if (cd "$ws" && cargo fmt --version >/dev/null 2>&1); then
-        run_step "cargo fmt --check" "$ws" cargo fmt --all -- --check || detail "napraw: (cd $rel && cargo fmt --all)"
+        run_step "cargo fmt --check" "$ws" cargo fmt --all -- --check || detail "fix: (cd $rel && cargo fmt --all)"
       else
-        skip "rustfmt niezainstalowany (rustup component add rustfmt)"
+        skip "rustfmt is not installed (rustup component add rustfmt)"
       fi
       run_step "cargo check --workspace --all-targets${lock[*]:+ --locked}" "$ws" \
         cargo check --workspace --all-targets ${lock[@]+"${lock[@]}"} \
-        || { grep -q 'lock file.*needs to be updated' "$LAST_LOG" && detail "Cargo.lock jest nieaktualny: uruchom cargo update -w albo cargo check bez --locked i zacommituj Cargo.lock"; }
+        || { grep -q 'lock file.*needs to be updated' "$LAST_LOG" && detail "Cargo.lock is out of date: run cargo update -w, or cargo check without --locked, and commit Cargo.lock"; }
       if ((CLIPPY)); then
         if (cd "$ws" && cargo clippy --version >/dev/null 2>&1); then
           run_step "cargo clippy -D warnings" "$ws" cargo clippy --workspace --all-targets ${lock[@]+"${lock[@]}"} -- -D warnings
-        else skip "clippy niezainstalowany (rustup component add clippy)"; fi
+        else skip "clippy is not installed (rustup component add clippy)"; fi
       fi
       if ((SKIP_TESTS)); then
         skip "cargo test (--skip-tests)"
       else
-        run_step "cargo test --workspace" "$ws" cargo test --workspace ${lock[@]+"${lock[@]}"}
+        trc=0
+        run_step "cargo test --workspace" "$ws" cargo test --workspace ${lock[@]+"${lock[@]}"} || trc=$?
+        if ((trc == 0)) || grep -q '^test result:' "$LAST_LOG"; then summarize_rust_tests "$trc"; fi
       fi
       if ((VULN)); then
         if (cd "$ws" && cargo audit --version >/dev/null 2>&1); then run_step "cargo audit" "$ws" cargo audit
-        else skip "cargo-audit niezainstalowany (cargo install cargo-audit)"; fi
+        else skip "cargo-audit is not installed (cargo install cargo-audit)"; fi
       fi
     done
   fi
@@ -378,9 +431,9 @@ if wants cpp; then
   section "C++ (CMake)"
   readarray -t CMAKES < <(find_manifests CMakeLists.txt)
   if ((${#CMAKES[@]} == 0)); then
-    info "brak CMakeLists.txt w repo"
+    info "no CMakeLists.txt in the repo"
   elif ! have cmake; then
-    skip "cmake nie jest zainstalowany: pomijam ${#CMAKES[@]} plikow CMakeLists.txt"
+    skip "cmake is not installed: skipping ${#CMAKES[@]} CMakeLists.txt files"
   else
     CXX_FOUND=""
     for c in "${CXX:-}" c++ g++ clang++; do
@@ -389,7 +442,7 @@ if wants cpp; then
     GEN=()
     have ninja && GEN=(-G Ninja)
     if [[ -z "$CXX_FOUND" ]]; then
-      skip "nie znaleziono kompilatora C++ (c++/g++/clang++)"
+      skip "no C++ compiler found (c++/g++/clang++)"
     else
       CM_ROOTS=()
       for cm in "${CMAKES[@]}"; do
@@ -401,32 +454,35 @@ if wants cpp; then
         done
         ((isroot)) && CM_ROOTS+=("$d")
       done
-      info "glowne projekty CMake: ${#CM_ROOTS[@]} (kompilator: $CXX_FOUND, generator: ${GEN[1]:-domyslny})"
+      info "root CMake projects: ${#CM_ROOTS[@]} (compiler: $CXX_FOUND, generator: ${GEN[1]:-default})"
       for r in "${CM_ROOTS[@]}"; do
         rel=$(rel_of "$r")
         CTX="cmake:$rel"
-        subsection "projekt $rel"
+        subsection "project $rel"
         B="$TMPD/cmake.$((++LOGN))"
         if run_step "cmake configure" "$r" cmake -S "$r" -B "$B" -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_CXX_FLAGS="-Wall -Wextra" ${GEN[@]+"${GEN[@]}"}; then
           if run_step "cmake --build (-j$JOBS)" "$r" cmake --build "$B" -j "$JOBS"; then
             nwarn=$(grep -c 'warning:' "$LAST_LOG" || true)
             if ((nwarn > 0)); then
-              warn "$nwarn ostrzezen kompilatora (-Wall -Wextra); pierwsze:"
+              warn "$nwarn compiler warnings (-Wall -Wextra); first ones:"
               grep -m5 'warning:' "$LAST_LOG" | sed -E "s#$ROOT/##" | cut -c1-160 | sed 's/^/           | /'
             else
-              ok "kompilacja bez ostrzezen (-Wall -Wextra)"
+              ok "build without warnings (-Wall -Wextra)"
             fi
             if ((SKIP_TESTS)); then
               skip "ctest (--skip-tests)"
             elif have ctest; then
               if run_step "ctest" "$B" ctest --output-on-failure --timeout 120; then
                 if grep -q 'No tests were found' "$LAST_LOG"; then
-                  warn "ctest nie znalazl zadnych testow (dodaj enable_testing() i add_test() w CMakeLists.txt)"
+                  warn "ctest found no tests (add enable_testing() and add_test() to CMakeLists.txt)"
+                else
+                  nct=$(grep -oE 'out of [0-9]+' "$LAST_LOG" | grep -oE '[0-9]+' | tail -n1 || true)
+                  [[ -n "$nct" ]] && info "ctest: $nct tests"
                 fi
               fi
             else
-              skip "ctest niezainstalowany"
+              skip "ctest is not installed"
             fi
           fi
         fi
@@ -436,10 +492,14 @@ if wants cpp; then
 fi
 
 # ==========================================================================
-printf '\n%sPodsumowanie:%s %s%d OK%s, %s%d ostrzezen%s, %s%d bledow%s, %d pominietych\n' "$C_BLD" "$C_RST" \
+printf '\n%sSummary:%s %s%d OK%s, %s%d warnings%s, %s%d errors%s, %d skipped\n' "$C_BLD" "$C_RST" \
   "$C_GRN" "$N_OK" "$C_RST" "$C_YEL" "$N_WARN" "$C_RST" "$C_RED" "$N_FAIL" "$C_RST" "$N_SKIP"
+if ((TESTS_RAN)); then
+  printf '%sTests:%s Go %d passed / %d skipped / %d failed;  Rust %d passed / %d ignored / %d failed\n' "$C_BLD" "$C_RST" \
+    "$GO_PASS" "$GO_SKIPPED" "$GO_FAILED" "$RS_PASS" "$RS_IGNORED" "$RS_FAILED"
+fi
 if ((${#FAILED[@]})); then
-  printf '%sDo naprawienia:%s\n' "$C_BLD" "$C_RST"
+  printf '%sTo fix:%s\n' "$C_BLD" "$C_RST"
   printf '  - %s\n' "${FAILED[@]}"
 fi
 ((N_FAIL > 0)) && exit 1
