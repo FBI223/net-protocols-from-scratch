@@ -33,4 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: bash check-layout.sh            # repository structure checks
+      - run: bash check-layout.sh
+      - run: bash check-layout.sh --markdown >> "$GITHUB_STEP_SUMMARY"
+        if: always()
