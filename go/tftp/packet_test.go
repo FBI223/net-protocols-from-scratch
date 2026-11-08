@@ -2,6 +2,7 @@ package tftp
 
 import (
 	"bytes"
+	"maps"
 	"testing"
 )
 
@@ -192,6 +193,7 @@ func TestParseError(t *testing.T) {
 		{"zero inside message", []byte{0, 5, 0, 1, 'a', 0, 'b', 0}, ErrorPacket{}, true},
 		{"wrong opcode", []byte{0, 4, 0, 1, 'a', 0}, ErrorPacket{}, true},
 		{"too long", tooLong, ErrorPacket{}, true},
+		{"option negotiation", []byte{0, 5, 0, 8, 'x', 0}, ErrorPacket{8, "x"}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -251,5 +253,230 @@ func TestErrorRoundTrip(t *testing.T) {
 		if out != in {
 			t.Errorf("got %+v, want %+v", out, in)
 		}
+	}
+}
+
+func TestParseRequestDuplicateOption(t *testing.T) {
+	in := []byte("\x00\x01f\x00octet\x00blksize\x00512\x00BLKSIZE\x001024\x00")
+	if _, err := ParseRequest(in); err == nil {
+		t.Fatal("expected an error for a duplicated option")
+	}
+}
+
+func TestRequestMarshal(t *testing.T) {
+	long := Request{Op: OpRRQ, Filename: string(bytes.Repeat([]byte{'x'}, 511)), Mode: "octet"} // 520 bytes
+	many := map[string]string{}
+	for i := 0; i < MaxOptions+1; i++ {
+		many[string(rune('a'+i))] = "1"
+	}
+
+	name503 := string(bytes.Repeat([]byte{'x'}, 503))
+	name504 := string(bytes.Repeat([]byte{'x'}, 504))
+
+	tests := []struct {
+		name    string
+		in      Request
+		want    []byte
+		wantErr bool
+	}{
+		{"RRQ", Request{Op: OpRRQ, Filename: "file", Mode: "octet"}, []byte("\x00\x01file\x00octet\x00"), false},
+		{"mode is lower-cased", Request{Op: OpWRQ, Filename: "a", Mode: "OCTET"}, []byte("\x00\x02a\x00octet\x00"), false},
+		{"options sorted by name", Request{Op: OpRRQ, Filename: "f", Mode: "octet",
+			Options: map[string]string{"tsize": "0", "blksize": "1024"}},
+			[]byte("\x00\x01f\x00octet\x00blksize\x001024\x00tsize\x000\x00"), false},
+		{"bad opcode", Request{Op: OpAck, Filename: "f", Mode: "octet"}, nil, true},
+		{"empty filename", Request{Op: OpRRQ, Mode: "octet"}, nil, true},
+		{"zero in filename", Request{Op: OpRRQ, Filename: "a\x00b", Mode: "octet"}, nil, true},
+		{"bad mode", Request{Op: OpRRQ, Filename: "f", Mode: "binary"}, nil, true},
+		{"empty option name", Request{Op: OpRRQ, Filename: "f", Mode: "octet", Options: map[string]string{"": "1"}}, nil, true},
+		{"upper-case option name", Request{Op: OpRRQ, Filename: "f", Mode: "octet", Options: map[string]string{"BlkSize": "1"}}, nil, true},
+		{"zero in option value", Request{Op: OpRRQ, Filename: "f", Mode: "octet", Options: map[string]string{"a": "1\x002"}}, nil, true},
+		{"too many options", Request{Op: OpRRQ, Filename: "f", Mode: "octet", Options: many}, nil, true},
+		{"too long", long, nil, true},
+		{"512 bytes is the max", Request{Op: OpRRQ, Filename: name503, Mode: "octet"}, []byte("\x00\x01" + name503 + "\x00octet\x00"), false},
+		{"513 bytes too long", Request{Op: OpRRQ, Filename: name504, Mode: "octet"}, nil, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.in.MarshalBinary()
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("err = %v, wantErr = %v", err, tt.wantErr)
+			}
+			if !bytes.Equal(got, tt.want) {
+				t.Errorf("got %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestRequestRoundTrip(t *testing.T) {
+	for _, in := range []Request{
+		{Op: OpRRQ, Filename: "file", Mode: "octet"},
+		{Op: OpWRQ, Filename: "dir/a.txt", Mode: "netascii"},
+		{Op: OpRRQ, Filename: "f", Mode: "mail"},
+		{Op: OpRRQ, Filename: "f", Mode: "octet", Options: map[string]string{"blksize": "1428", "tsize": "0"}},
+	} {
+		b, err := in.MarshalBinary()
+		if err != nil {
+			t.Fatalf("%+v: marshal: %v", in, err)
+		}
+		out, err := ParseRequest(b)
+		if err != nil {
+			t.Fatalf("%+v: parse: %v", in, err)
+		}
+		if out.Op != in.Op || out.Filename != in.Filename || out.Mode != in.Mode ||
+			!maps.Equal(out.Options, in.Options) {
+			t.Errorf("got %+v, want %+v", out, in)
+		}
+	}
+}
+
+func TestParse(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   []byte
+		wantOp  Opcode
+		wantErr bool
+	}{
+		{"RRQ", []byte("\x00\x01f\x00octet\x00"), OpRRQ, false},
+		{"WRQ", []byte("\x00\x02f\x00octet\x00"), OpWRQ, false},
+		{"DATA", []byte{0, 3, 0, 1, 'a'}, OpData, false},
+		{"ACK", []byte{0, 4, 0, 1}, OpAck, false},
+		{"ERROR", []byte{0, 5, 0, 1, 'x', 0}, OpError, false},
+		{"opcode 0", []byte{0, 0, 0, 0}, 0, true},
+		{"opcode 6 (OACK, not supported yet)", []byte{0, 6, 0, 0}, 0, true},
+		{"empty", nil, 0, true},
+		{"truncated ACK", []byte{0, 4, 0}, 0, true},
+		{"bad RRQ", []byte("\x00\x01f"), 0, true},
+		{"bad DATA", []byte{0, 3, 0}, 0, true},
+		{"bad ERROR", []byte{0, 5, 0, 1}, 0, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			p, err := Parse(tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("err = %v, wantErr = %v", err, tt.wantErr)
+			}
+			if err != nil {
+				if p != nil { // guards against the "non-nil interface holding a zero value" trap
+					t.Errorf("want nil Packet on error, got %#v", p)
+				}
+				return
+			}
+			if p.Opcode() != tt.wantOp {
+				t.Errorf("opcode = %d, want %d", p.Opcode(), tt.wantOp)
+			}
+		})
+	}
+}
+
+func TestParseRequest(t *testing.T) {
+	tooLong := append([]byte("\x00\x01"), bytes.Repeat([]byte{'x'}, 510)...)
+	tooLong = append(tooLong, []byte("\x00octet\x00")...) // 519 bytes
+	exact := append([]byte("\x00\x01"), bytes.Repeat([]byte{'x'}, 503)...)
+	exact = append(exact, []byte("\x00octet\x00")...) // 2+503+1+5+1 = 512 bytes
+	over := append([]byte("\x00\x01"), bytes.Repeat([]byte{'x'}, 504)...)
+	over = append(over, []byte("\x00octet\x00")...) // 513 bytes
+
+	tooMany := []byte("\x00\x01f\x00octet\x00")
+	for i := 0; i < MaxOptions+1; i++ {
+		tooMany = append(tooMany, 'a'+byte(i), 0, '1', 0) // options "a","b",... = "1"
+	}
+
+	tests := []struct {
+		name    string
+		input   []byte
+		want    Request
+		wantErr bool
+	}{
+		{"RRQ octet", []byte("\x00\x01file\x00octet\x00"), Request{OpRRQ, "file", "octet", nil}, false},
+		{"WRQ upper-case mode", []byte("\x00\x02a.txt\x00OCTET\x00"), Request{OpWRQ, "a.txt", "octet", nil}, false},
+		{"mixed-case netascii", []byte("\x00\x01f\x00NetAscii\x00"), Request{OpRRQ, "f", "netascii", nil}, false},
+		{"mail parses", []byte("\x00\x01f\x00mail\x00"), Request{OpRRQ, "f", "mail", nil}, false},
+		{"blksize option", []byte("\x00\x01f\x00octet\x00BlkSize\x001428\x00"),
+			Request{OpRRQ, "f", "octet", map[string]string{"blksize": "1428"}}, false},
+		{"two options", []byte("\x00\x01f\x00octet\x00tsize\x000\x00blksize\x001024\x00"),
+			Request{OpRRQ, "f", "octet", map[string]string{"tsize": "0", "blksize": "1024"}}, false},
+		{"empty filename", []byte("\x00\x01\x00octet\x00"), Request{}, true},
+		{"unknown mode", []byte("\x00\x01f\x00binary\x00"), Request{}, true},
+		{"no final zero", []byte("\x00\x01f\x00octet"), Request{}, true},
+		{"no zeros at all", []byte("\x00\x01file"), Request{}, true},
+		{"option without value", []byte("\x00\x01f\x00octet\x00blksize\x00"), Request{}, true},
+		{"empty option name", []byte("\x00\x01f\x00octet\x00\x001\x00"), Request{}, true},
+		{"too many options", tooMany, Request{}, true},
+		{"wrong opcode", []byte("\x00\x04f\x00octet\x00"), Request{}, true},
+		{"too long", tooLong, Request{}, true},
+		{"too short", []byte("\x00\x01f\x00o"), Request{}, true},
+		{"512 bytes is the max", exact, Request{OpRRQ, string(bytes.Repeat([]byte{'x'}, 503)), "octet", nil}, false},
+		{"513 bytes too long", over, Request{}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ParseRequest(tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("err = %v, wantErr = %v", err, tt.wantErr)
+			}
+			// A struct with a map cannot be compared with ==, so compare field by field.
+			if got.Op != tt.want.Op || got.Filename != tt.want.Filename ||
+				got.Mode != tt.want.Mode || !maps.Equal(got.Options, tt.want.Options) {
+				t.Errorf("got %+v, want %+v", got, tt.want)
+			}
+		})
+	}
+}
+
+// ParseData must copy the payload: the receive buffer gets reused.
+func TestParseDataCopiesPayload(t *testing.T) {
+	buf := []byte{0, 3, 0, 1, 'a', 'b', 'c'}
+	d, err := ParseData(buf)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	buf[4] = 'X' // simulate the next packet overwriting the buffer
+	if string(d.Payload) != "abc" {
+		t.Errorf("payload changed together with the buffer: got %q", d.Payload)
+	}
+}
+
+// Only A-Z are lower-cased. strings.ToLower would also fold some non-ASCII
+// characters (e.g. the Kelvin sign U+212A turns into "k").
+func TestLowerASCII(t *testing.T) {
+	tests := []struct{ in, want string }{
+		{"OcTeT", "octet"},
+		{"netascii", "netascii"},
+		{"BLKSIZE", "blksize"},
+		{"\u212A", "\u212A"},
+		{"", ""},
+	}
+	for _, tt := range tests {
+		if got := lowerASCII(tt.in); got != tt.want {
+			t.Errorf("lowerASCII(%q) = %q, want %q", tt.in, got, tt.want)
+		}
+	}
+}
+
+func TestErrorCodeValues(t *testing.T) {
+	// Values fixed by the RFC 1350 appendix and RFC 2347.
+	tests := []struct {
+		name string
+		got  uint16
+		want uint16
+	}{
+		{"not defined", ErrNotDefined, 0},
+		{"file not found", ErrFileNotFound, 1},
+		{"access violation", ErrAccessViolation, 2},
+		{"disk full", ErrDiskFull, 3},
+		{"illegal operation", ErrIllegalOp, 4},
+		{"unknown TID", ErrUnknownTID, 5},
+		{"file exists", ErrFileExists, 6},
+		{"no such user", ErrNoSuchUser, 7},
+		{"option negotiation", ErrOptionNegotiation, 8},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.got != tt.want {
+				t.Errorf("got %d, want %d", tt.got, tt.want)
+			}
+		})
 	}
 }
