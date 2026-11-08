@@ -2,7 +2,7 @@
 
 Network protocols implemented from scratch in **Go** and **Rust**, working directly from the specifications (RFCs, IEEE, OASIS).
 
-> **Status: work in progress.** One protocol (TFTP) is implemented and tested. The other directories are skeletons that fix the package layout and the planned scope; they are implemented one at a time. A directory is marked *Implemented* only when it has real code, tests against vectors from the specification, and a documented way to run it.
+> **Status: work in progress.** So far only the TFTP packet codec is implemented and tested. The rest of TFTP and the other directories are skeletons that fix the package layout and the planned scope; they are implemented one at a time. A directory is marked *Implemented* only when it has real code, tests against vectors from the specification, and a documented way to run it.
 
 | Status | Meaning |
 |---|---|
@@ -20,7 +20,7 @@ Grouped by network layer. Every directory has its own `README.md`.
 
 | Directory | Lang | Protocol / specification | Status | Planned scope | Executables |
 |---|---|---|---|---|---|
-| [`tftp/`](tftp/) | Go | TFTP, RFC 1350 with options (RFC 2347, 2348, 2349) | **In progress** | packet codec (RRQ/WRQ, DATA, ACK, ERROR) with unit tests; client, server and transfer logic; RFC texts in `tftp/rfcs/` | `tftp`, `tftpd` |
+| [`tftp/`](tftp/) | Go | TFTP, RFC 1350 with options (RFC 2347, 2348, 2349) | **In progress** | done: packet codec (RRQ/WRQ, DATA, ACK, ERROR) with unit tests; next: lock-step transfer logic, client (Get/Put), server (ListenAndServe); RFC texts in `tftp/rfcs/` | `tftp`, `tftpd` |
 | [`arp/`](arp/) | Go | ARP, RFC 826 | Planned | packet codec, cache, responder | `arping` |
 | [`lldp/`](lldp/) | Go | LLDP, IEEE 802.1AB | Planned | frame and TLV codec, agent | `lldpd` |
 | [`icmp/`](icmp/) | Go | ICMP, RFC 792 | Planned | packet codec, raw sockets, ping, traceroute | `ping`, `traceroute` |
