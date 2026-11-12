@@ -20,6 +20,11 @@ const (
 	defaultRetries    = 5 // retransmissions after the first send
 )
 
+// dallyFactor sets the default dally to dallyFactor times the retransmission
+// timeout. The dally should outlast the peer's first retransmission, or it
+// cannot catch a repeated final DATA.
+const dallyFactor = 1
+
 var (
 	// ErrTimeout means the peer stopped answering after all retransmissions.
 	ErrTimeout = errors.New("tftp: timed out waiting for the peer")
@@ -61,7 +66,7 @@ func newTransfer(conn net.PacketConn, peer net.Addr) *transfer {
 		timeout:    defaultTimeout,
 		maxTimeout: defaultMaxTimeout,
 		retries:    defaultRetries,
-		dally:      2 * defaultTimeout,
+		dally:      dallyFactor * defaultTimeout,
 		// The extra byte lets us notice an oversized datagram: UDP reads into a
 		// too-small buffer silently cut the packet and report no error.
 		buf: make([]byte, 4+defaultBlockSize+1),

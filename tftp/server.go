@@ -188,7 +188,7 @@ func (s *Server) newTransfer(conn net.PacketConn, client net.Addr) *transfer {
 	t := newTransfer(conn, client)
 	if s.Timeout > 0 {
 		t.timeout = s.Timeout
-		t.dally = 2 * s.Timeout
+		t.dally = dallyFactor * s.Timeout
 	}
 	if s.MaxTimeout > 0 {
 		t.maxTimeout = s.MaxTimeout

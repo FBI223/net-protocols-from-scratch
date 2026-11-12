@@ -343,18 +343,10 @@ type Packet interface {
 	MarshalBinary() ([]byte, error)
 }
 
-func (r Request) Opcode() Opcode   { return r.Op }
-func (Ack) Opcode() Opcode         { return OpAck }
-func (Data) Opcode() Opcode        { return OpData }
-func (ErrorPacket) Opcode() Opcode { return OpError }
-
-// Compile-time check that all packet types implement Packet.
-var (
-	_ Packet = Request{}
-	_ Packet = Ack{}
-	_ Packet = Data{}
-	_ Packet = ErrorPacket{}
-)
+func (r Request) Opcode() Opcode     { return r.Op }
+func (a Ack) Opcode() Opcode         { return OpAck }
+func (d Data) Opcode() Opcode        { return OpData }
+func (e ErrorPacket) Opcode() Opcode { return OpError }
 
 // Parse reads the opcode and calls the matching parser.
 func Parse(b []byte) (Packet, error) {

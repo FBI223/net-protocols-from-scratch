@@ -109,7 +109,7 @@ func (c *Client) start(op Opcode, addr, filename string) (t *transfer, req []byt
 	t = newTransfer(conn, nil) // the server's TID is unknown until it answers
 	if c.Timeout > 0 {
 		t.timeout = c.Timeout
-		t.dally = 2 * c.Timeout
+		t.dally = dallyFactor * c.Timeout
 	}
 	if c.MaxTimeout > 0 {
 		t.maxTimeout = c.MaxTimeout
