@@ -20,10 +20,10 @@ const (
 	defaultRetries    = 5 // retransmissions after the first send
 )
 
-// dallyFactor sets the default dally to dallyFactor times the retransmission
+// dallyFactor sets the default dally time to dallyFactor times the retransmission
 // timeout. The dally should outlast the peer's first retransmission, or it
 // cannot catch a repeated final DATA.
-const dallyFactor = 1
+const dallyFactor = 2
 
 var (
 	// ErrTimeout means the peer stopped answering after all retransmissions.
