@@ -87,6 +87,14 @@ func (s *Server) Serve(ctx context.Context, conn net.PacketConn) error {
 	var wg sync.WaitGroup
 	defer wg.Wait()
 
+	// A client that does not hear the first answer repeats its request from
+	// the same port. The transfer it started repeats its own first packet, so
+	// the repeated request is ignored instead of starting a second transfer.
+	// A second transfer would answer a repeated WRQ with ERROR 6, because the
+	// first one has already created the file, and the client would give up.
+	var mu sync.Mutex
+	active := map[string]bool{}
+
 	buf := make([]byte, 2048)
 	for {
 		n, from, err := conn.ReadFrom(buf)
@@ -112,9 +120,21 @@ func (s *Server) Serve(ctx context.Context, conn net.PacketConn) error {
 			continue
 		}
 
+		key := requestKey(from, req)
+		mu.Lock()
+		repeated := active[key]
+		active[key] = true
+		mu.Unlock()
+		if repeated {
+			continue
+		}
+
 		select {
 		case slots <- struct{}{}:
 		default:
+			mu.Lock()
+			delete(active, key)
+			mu.Unlock()
 			lg.Warn("too many transfers, request refused", "client", from.String())
 			refuse(conn, from, "server busy")
 			continue
@@ -123,9 +143,21 @@ func (s *Server) Serve(ctx context.Context, conn net.PacketConn) error {
 		go func() {
 			defer wg.Done()
 			defer func() { <-slots }()
+			defer func() {
+				mu.Lock()
+				delete(active, key)
+				mu.Unlock()
+			}()
 			s.handle(ctx, conn, root, lg, req, from)
 		}()
+
 	}
+}
+
+// requestKey identifies a request: the same client port asking for the same
+// thing. Options are left out, a repeated request carries the same ones.
+func requestKey(from net.Addr, r Request) string {
+	return fmt.Sprintf("%s|%d|%s", from, r.Op, r.Filename)
 }
 
 // validClient reports whether a request may come from this address. A
