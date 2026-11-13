@@ -531,3 +531,23 @@ func TestValidClient(t *testing.T) {
 		})
 	}
 }
+
+// A server on a wildcard address could not ignore requests sent to a
+// broadcast address (RFC 1123 §4.2.3.5), so Serve refuses such a socket.
+func TestServeRefusesWildcardAddress(t *testing.T) {
+	for _, addr := range []string{"0.0.0.0:0", "[::]:0"} {
+		conn, err := net.ListenPacket("udp", addr)
+		if err != nil {
+			t.Skipf("cannot listen on %s: %v", addr, err)
+		}
+		// The timeout only stops a broken Serve that would run forever.
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		s := &Server{Root: t.TempDir()}
+		err = s.Serve(ctx, conn)
+		cancel()
+		if err == nil {
+			t.Errorf("Serve on %s: want an error, got nil", addr)
+		}
+		_ = conn.Close()
+	}
+}
