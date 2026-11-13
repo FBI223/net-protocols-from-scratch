@@ -302,8 +302,8 @@ func openRegular(root *os.Root, name string) (*os.File, error) {
 }
 
 func (s *Server) serveRead(ctx context.Context, t *transfer, root *os.Root, req Request) error {
-	if req.Mode != transferMode {
-		return t.reject(ErrIllegalOp, "only octet mode is supported")
+	if !supportedMode(req.Mode) {
+		return t.reject(ErrIllegalOp, "only octet and netascii modes are supported")
 	}
 	f, err := openRegular(root, localName(req.Filename))
 	if err != nil {
@@ -311,15 +311,15 @@ func (s *Server) serveRead(ctx context.Context, t *transfer, root *os.Root, req 
 		return t.reject(code, msg)
 	}
 	defer func() { _ = f.Close() }()
-	return t.sendFile(ctx, f)
+	return t.sendFile(ctx, readerFor(req.Mode, f))
 }
 
 func (s *Server) serveWrite(ctx context.Context, t *transfer, root *os.Root, req Request) error {
 	if !s.AllowWrite {
 		return t.reject(ErrAccessViolation, "writing is not allowed")
 	}
-	if req.Mode != transferMode {
-		return t.reject(ErrIllegalOp, "only octet mode is supported")
+	if !supportedMode(req.Mode) {
+		return t.reject(ErrIllegalOp, "only octet and netascii modes are supported")
 	}
 	name := localName(req.Filename)
 	if name == "" {
@@ -339,7 +339,11 @@ func (s *Server) serveWrite(ctx context.Context, t *transfer, root *os.Root, req
 		_ = f.Close()
 		return err
 	}
-	err = t.recvFile(ctx, f, ack0, t.peer)
+	out, finish := writerFor(req.Mode, f)
+	err = t.recvFile(ctx, out, ack0, t.peer)
+	if err == nil {
+		err = finish() // netascii: write a CR that was waiting for the next byte
+	}
 	if cerr := f.Close(); err == nil {
 		err = cerr
 	}

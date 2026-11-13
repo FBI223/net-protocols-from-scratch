@@ -5,7 +5,7 @@ codec, a lock-step transfer engine, a client, a server, and two small
 command-line programs. It uses only the Go standard library.
 
 **Status:** RFC 1350 in octet mode, for both client and server. Not
-implemented yet: netascii mode, and the option extensions of RFC 2347, 2348
+implemented yet: option extensions of RFC 2347, 2348
 and 2349. See [RFC compliance](#rfc-compliance) and
 [Limitations](#limitations-and-not-yet-verified) for the exact list.
 
@@ -258,7 +258,7 @@ built to be safe by default.
 | Reflection and amplification | Datagrams that are not valid requests get no answer at all. Requests from port 0, or from an unspecified, multicast or broadcast address, are dropped. |
 | Resource exhaustion | `MaxTransfers` limits simultaneous transfers; further requests get ERROR "server busy". |
 | Repeated requests | A request repeated from the same client port while its transfer is still running is ignored (see below). |
-| Unsupported modes | `mail` and `netascii` get ERROR 4. |
+| Unsupported modes | `mail` gets ERROR 4. |
 
 **Repeated requests.** If the first answer to a write request is lost, the
 client sends the request again from the same port. A naive server starts a
@@ -293,7 +293,7 @@ Status: **Yes** implemented and tested; **Partial**; **No** not implemented.
 | Dallying after the final ACK (encouraged) | §6 | Yes | `TestClientGetDally`, `TestScenarioLostFinalAckOnGet`, `TestScenarioLostFinalAckOnPut` |
 | Premature termination by ERROR (a courtesy, not guaranteed) | §7 | Yes | `TestClientGetWriterError`, `TestServerPutAbortedIsRemoved` |
 | Error codes 0-7 | appendix | Yes | `TestErrorCodeValues`; server tests for codes 1, 2, 4, 6 |
-| Mode `netascii` | §5 | **No** | the server answers ERROR 4 (`TestServerModes`); the client always sends `octet` |
+| Mode `netascii` | §5 | Yes | `TestNetasciiEncode`, `TestNetasciiDecode`, `TestNetasciiServerSendsWireForm`, `TestNetasciiServerReceivesWireForm`, `TestNetasciiClientRoundTrip`; line end is CR LF on the wire, a lone CR is sent as CR NUL |
 | Mode `mail` | §5 | Refused | ERROR 4; RFC 1123 says it SHOULD NOT be supported |
 | Security considerations: the protocol has no access control | Security | Yes | see [Security](#security) |
 
@@ -303,14 +303,13 @@ Status: **Yes** implemented and tested; **Partial**; **No** not implemented.
 |---|---|---|---|---|
 | Fix the Sorcerer's Apprentice Syndrome: never resend DATA on a duplicate ACK | 4.2.3.1 | MUST | Yes | `TestSenderIgnoresDuplicateAck`, `TestScenarioDuplicateAckDoesNotResendData`, `TestScenarioDuplicateDataIsHarmless`, `TestScenarioDuplicateDataOnPut` (they count DATA packets on the wire) |
 | Adaptive timeout, at least exponential backoff | 4.2.3.2 | MUST | Yes (backoff only) | `TestSenderGivesUp`, `TestScenarioLostDataTwice` |
-| Support `netascii` | RFC 783 | MUST | **No** | not implemented |
+| Support `netascii` | RFC 783 | MUST | Yes | same tests, plus `FuzzNetascii`; checked with our own client and server only, not yet against another implementation |
 | Support `octet` | RFC 783 | MUST | Yes | all transfer tests |
 | Do not support `mail` | 4.2.2.1 | SHOULD NOT | Yes | `TestServerModes` |
 | Configurable access control over path names | 4.2.3.4 | SHOULD | Partial | one served root (`os.Root`) and a write switch; no per-user or per-path rules |
 | Silently ignore requests sent to a broadcast address | 4.2.3.5 | SHOULD | **Yes** | `Serve` refuses a socket bound to a wildcard address; a socket bound to one unicast address does not receive broadcast.|
 
-**The MUST for `netascii` is not met.** This implementation is therefore not
-fully RFC 1123 conformant until netascii is added.
+
 
 ### RFC 2347, 2348, 2349: option extensions
 
@@ -441,7 +440,7 @@ TFTP*.
 
 `tftp -m binary 127.0.0.1 6969 -c get a.bin` and then `put`, with a 5000-byte
 file. The `-m binary` option selects octet mode; the default of `tftp-hpa` is
-netascii, which this server refuses.
+netascii
 
 | Packets | Observation |
 |---|---|
@@ -485,7 +484,6 @@ That is the client's dally (twice the 1 s timeout), not a delay of the server.
 
 Not implemented:
 
-- `netascii` mode (required by RFC 1123, see above).
 - Options: `blksize`, `timeout`, `tsize` (RFC 2347 to 2349), and OACK.
 - Adaptive timeout based on measured round-trip times (only exponential
   backoff).

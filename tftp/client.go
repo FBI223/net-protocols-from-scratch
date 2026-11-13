@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"strings"
 	"time"
 )
-
-// transferMode is the only mode the client uses for now. Plain bytes, no
-// newline conversion (netascii) and no options (RFC 2347).
-const transferMode = "octet"
 
 // Client downloads and uploads files. The zero value works: it uses the
 // default timers. Fields are only needed to change them, for example in tests.
 // A Client holds no connection, so one value can be used from many goroutines.
 type Client struct {
+	// Mode is the transfer mode: ModeOctet (bytes as they are) or
+	// ModeNetascii (text; line ends are converted). Empty means ModeOctet.
+	Mode string
 	// Timeout is how long to wait for a reply before the first
 	// retransmission. Zero or negative means 1 second.
 	Timeout time.Duration
@@ -48,9 +48,9 @@ func Put(ctx context.Context, addr, filename string, r io.Reader) error {
 	return (&Client{}).Put(ctx, addr, filename, r)
 }
 
-// Get is like the package-level Get, with this client's timers.
+// Get is like the package-level Get, with this client's timers and mode.
 func (c *Client) Get(ctx context.Context, addr, filename string, w io.Writer) error {
-	t, req, server, err := c.start(OpRRQ, addr, filename)
+	t, req, server, mode, err := c.start(OpRRQ, addr, filename)
 	if err != nil {
 		return fmt.Errorf("tftp get %q: %w", filename, err)
 	}
@@ -58,15 +58,19 @@ func (c *Client) Get(ctx context.Context, addr, filename string, w io.Writer) er
 
 	// The RRQ is the first packet. The server answers DATA 1 from a new port
 	// (its TID), and recvFile remembers that port from then on.
-	if err := t.recvFile(ctx, w, req, server); err != nil {
+	out, finish := writerFor(mode, w)
+	if err := t.recvFile(ctx, out, req, server); err != nil {
+		return fmt.Errorf("tftp get %q: %w", filename, err)
+	}
+	if err := finish(); err != nil {
 		return fmt.Errorf("tftp get %q: %w", filename, err)
 	}
 	return nil
 }
 
-// Put is like the package-level Put, with this client's timers.
+// Put is like the package-level Put, with this client's timers and mode.
 func (c *Client) Put(ctx context.Context, addr, filename string, r io.Reader) error {
-	t, req, server, err := c.start(OpWRQ, addr, filename)
+	t, req, server, mode, err := c.start(OpWRQ, addr, filename)
 	if err != nil {
 		return fmt.Errorf("tftp put %q: %w", filename, err)
 	}
@@ -82,7 +86,7 @@ func (c *Client) Put(ctx context.Context, addr, filename string, r io.Reader) er
 	if err != nil {
 		return fmt.Errorf("tftp put %q: %w", filename, err)
 	}
-	if err := t.sendFile(ctx, r); err != nil {
+	if err := t.sendFile(ctx, readerFor(mode, r)); err != nil {
 		return fmt.Errorf("tftp put %q: %w", filename, err)
 	}
 	return nil
@@ -91,19 +95,27 @@ func (c *Client) Put(ctx context.Context, addr, filename string, r io.Reader) er
 // start checks the arguments, then opens a socket on a free local port (our
 // TID). Nothing is sent. The caller must close t.conn.
 //
-// Cheap checks come first, so a bad file name never touches the network.
-func (c *Client) start(op Opcode, addr, filename string) (t *transfer, req []byte, server net.Addr, err error) {
-	req, err = Request{Op: op, Filename: filename, Mode: transferMode}.MarshalBinary()
+// Cheap checks come first, so a bad mode or file name never touches the
+// network. It also returns the transfer mode in lower case.
+func (c *Client) start(op Opcode, addr, filename string) (t *transfer, req []byte, server net.Addr, mode string, err error) {
+	mode = strings.ToLower(c.Mode)
+	if mode == "" {
+		mode = ModeOctet
+	}
+	if !supportedMode(mode) {
+		return nil, nil, nil, "", fmt.Errorf("unsupported transfer mode %q", c.Mode)
+	}
+	req, err = Request{Op: op, Filename: filename, Mode: mode}.MarshalBinary()
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("build request: %w", err)
+		return nil, nil, nil, "", fmt.Errorf("build request: %w", err)
 	}
 	server, err = net.ResolveUDPAddr("udp", addr)
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("server address: %w", err)
+		return nil, nil, nil, "", fmt.Errorf("server address: %w", err)
 	}
 	conn, err := net.ListenPacket("udp", ":0")
 	if err != nil {
-		return nil, nil, nil, fmt.Errorf("open socket: %w", err)
+		return nil, nil, nil, "", fmt.Errorf("open socket: %w", err)
 	}
 
 	t = newTransfer(conn, nil) // the server's TID is unknown until it answers
@@ -126,5 +138,5 @@ func (c *Client) start(op Opcode, addr, filename string) (t *transfer, req []byt
 	case c.Dally < 0:
 		t.dally = 0
 	}
-	return t, req, server, nil
+	return t, req, server, mode, nil
 }
