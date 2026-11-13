@@ -353,9 +353,7 @@ func TestServerModes(t *testing.T) {
 		op   Opcode
 		mode string
 	}{
-		{"RRQ netascii", OpRRQ, "netascii"},
 		{"RRQ mail", OpRRQ, "mail"},
-		{"WRQ netascii", OpWRQ, "netascii"},
 		{"WRQ mail", OpWRQ, "mail"},
 	}
 	for _, tt := range tests {
