@@ -63,6 +63,14 @@ func (s *Server) ListenAndServe(ctx context.Context, addr string) error {
 // after all running transfers have ended.
 func (s *Server) Serve(ctx context.Context, conn net.PacketConn) error {
 	root, err := os.OpenRoot(s.Root)
+
+	// A socket bound to one unicast address never receives broadcast or
+	// multicast datagrams, so RFC 1123 §4.2.3.5 holds by construction.
+	if ua, ok := conn.LocalAddr().(*net.UDPAddr); ok && ua.IP.IsUnspecified() {
+		return errors.New("tftp server: listen on one unicast address, not on all addresses " +
+			"(requests to a broadcast address must be ignored, RFC 1123 §4.2.3.5)")
+	}
+
 	if err != nil {
 		return fmt.Errorf("tftp server: open root: %w", err)
 	}
