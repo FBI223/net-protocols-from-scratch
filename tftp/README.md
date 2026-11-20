@@ -4,13 +4,18 @@ A from-scratch implementation of the Trivial File Transfer Protocol: a packet
 codec, a lock-step transfer engine, a client, a server, and two small
 command-line programs. It uses only the Go standard library.
 
-**Status:** RFC 1350 in octet mode, for both client and server. Not
-implemented yet: option extensions of RFC 2347, 2348
-and 2349. See [RFC compliance](#rfc-compliance) and
-[Limitations](#limitations-and-not-yet-verified) for the exact list.
+**Status:** RFC 1350 in `octet` and `netascii` modes, for both client and
+server, with the TFTP MUSTs of RFC 1123 §4.2 listed in
+[RFC compliance](#rfc-compliance). Not implemented yet: the option extensions
+of RFC 2347, 2348 and 2349. See [Limitations](#limitations-and-not-yet-verified)
+for the exact list.
 
-Tested against an independent implementation (`tftp-hpa`) in both directions;
-packet captures are in [`testdata/pcap/`](testdata/pcap/).
+Tested against an independent implementation (`tftp-hpa`) in both directions:
+its client against our server, and our client against its server. Octet
+transfers are recorded in packet captures in
+[`testdata/pcap/`](testdata/pcap/). Netascii was checked by hand against the
+same program, without a capture. See
+[Evidence](#evidence-from-independent-implementations).
 
 - [What TFTP is](#what-tftp-is)
 - [Quick start](#quick-start)
@@ -56,6 +61,11 @@ mkdir -p /tmp/tftproot && head -c 5000 /dev/urandom > /tmp/tftproot/a.bin
 downloaded file when the transfer fails. The standard port 69 needs elevated
 privileges on most systems, so the examples use 6969.
 
+Both programs stop cleanly on Ctrl+C or SIGTERM. `tftpd` serves `octet` and
+`netascii` requests, whichever the client asks for. The `tftp` program always
+asks for `octet`; it has no mode flag yet, so netascii is available through
+the library (below).
+
 ### As a library
 
 ```go
@@ -71,6 +81,10 @@ err = tftp.Put(ctx, "127.0.0.1:6969", "b.bin", bytes.NewReader(data))
 // Change the timers (the zero value of Client uses the defaults below).
 c := &tftp.Client{Timeout: 500 * time.Millisecond, Retries: 8}
 err = c.Get(ctx, addr, "a.bin", &buf)
+
+// Text mode (netascii): line ends are converted to and from the host's own.
+c = &tftp.Client{Mode: tftp.ModeNetascii}
+err = c.Put(ctx, addr, "notes.txt", textReader)
 
 // Serve a folder until ctx is cancelled.
 srv := &tftp.Server{Root: "/srv/tftp", AllowWrite: false, Logger: slog.Default()}
@@ -96,6 +110,7 @@ Errors can be inspected with `errors.Is` and `errors.As`:
 | Wait after the final ACK ("dally") | 2 x `Timeout` | `Dally` (negative: none) |
 | Simultaneous transfers on a server | 100 | `Server.MaxTransfers` |
 | Data bytes per block | 512 | fixed (no option negotiation yet) |
+| Transfer mode | `octet` | `Client.Mode`: `ModeOctet` or `ModeNetascii` (the server accepts both) |
 
 These timer values are our own choices; RFC 1350 specifies none.
 
@@ -114,8 +129,9 @@ ERROR       |   5    | code (2)  | message | 0 |
 ```
 
 `mode` is `netascii`, `octet` or `mail` in any letter case. This
-implementation transfers `octet` (raw bytes). The bracketed option pairs are
-RFC 2347 syntax: they are parsed but not acted on (see
+implementation transfers `octet` (raw bytes) and `netascii` (text, see
+[below](#netascii-text-mode)); `mail` is obsolete and refused. The bracketed
+option pairs are RFC 2347 syntax: they are parsed but not acted on (see
 [RFC compliance](#rfc-compliance)).
 
 Error codes (RFC 1350 appendix, plus code 8 from RFC 2347):
@@ -163,6 +179,45 @@ therefore encourages it to *dally*: to keep listening for a short while, so it
 can acknowledge again if the peer repeats the last DATA. This implementation
 does so (default: twice the timeout).
 
+### Netascii (text mode)
+
+In `netascii` the file is text. RFC 1350 §1 defines it as 8-bit ASCII with the
+modifications of the Telnet specification, and §5 says that a host receiving
+netascii data "must translate the data to its own format". On the wire a line
+always ends with CR LF, whatever the two hosts use themselves. A CR that does
+not start a line end is sent as CR NUL, so the receiver can tell the two apart.
+Each side converts between its own line end and the wire form, so neither has to
+know what the other runs. The host's line end is LF everywhere except Windows
+(CR LF); it is chosen from `runtime.GOOS`.
+
+| Host line end | File to wire (sender) | Wire to file (receiver) |
+|---|---|---|
+| LF (Unix, macOS) | LF becomes CR LF; CR becomes CR NUL | CR LF becomes LF; CR NUL becomes CR |
+| CR LF (Windows) | CR LF stays CR LF; a lone LF becomes CR LF; a lone CR becomes CR NUL | CR LF stays CR LF; CR NUL becomes CR |
+
+Example from the tests (LF host): the file `a\nb\r\n` goes on the wire as
+`a CR LF b CR NUL CR LF`.
+
+Points that are easy to get wrong, and are covered by tests:
+
+- **Blocks count wire bytes, not file bytes.** Every line end grows by one byte,
+  so the file is shorter than what is sent. The end of the transfer is decided
+  on the wire: if the wire form is exactly a multiple of 512 bytes, an empty
+  last block follows.
+- **A line end can be cut in two.** CR may be the last byte of one block and LF
+  (or NUL) the first byte of the next. The decoder keeps that one CR between
+  blocks, and writes a CR that is still pending when the transfer ends
+  (`Close`).
+- **Read sizes do not matter.** The encoder gives the same bytes however the
+  source delivers its data (one byte at a time, data together with EOF).
+- **A text file does not always come back byte for byte.** On an LF host it
+  does. On a CR LF host a lone LF is sent, and written back, as CR LF.
+
+Bytes above 0x7F pass through unchanged: RFC 1350 calls netascii 8-bit ASCII,
+and real programs send UTF-8 and Latin-1 in this mode. Malformed input from the
+network is not an error: a CR followed by anything but LF or NUL is kept as a
+CR, and a lone LF is kept as an LF.
+
 ### Errors and lost packets
 
 - A lost DATA or ACK is found by a timeout. The sender repeats its last packet.
@@ -200,13 +255,17 @@ lost ACK 4:   sender              receiver
 |---|---|
 | `packet.go` | Types `Ack`, `Data`, `ErrorPacket`, `Request`; `Parse*` and `MarshalBinary` for each; limits. Never panics on any input. |
 | `transfer.go` | `exchange` (send, wait, retransmit with backoff), `sendFile`, `recvFile`, `linger`. Knows nothing about files or request types. |
-| `client.go` | `Client`, `Get`, `Put`. Validates arguments before touching the network. |
+| `netascii.go` | `ModeOctet`, `ModeNetascii`; `netasciiReader` (encodes while the file is read) and `netasciiWriter` (decodes while it is written; `Close` writes a pending CR); `readerFor` and `writerFor` pick them by mode. No network, no files. |
+| `client.go` | `Client`, `Get`, `Put`. Validates arguments (also the mode) before touching the network. |
 | `server.go` | `Server`, `Serve`, `ListenAndServe`. One goroutine and one socket per transfer. |
 
 Choices worth knowing:
 
 - **One engine for both sides.** The same `sendFile` and `recvFile` run in the
   client and in the server, so each rule is implemented and tested once.
+- **Modes are wrappers, not branches.** Netascii is an `io.Reader` around the
+  file when sending and an `io.Writer` around it when receiving. The transfer
+  engine does not know which mode runs; it only sees bytes.
 - **Absolute deadlines.** `wait` reads until one fixed deadline, so a stream of
   junk packets cannot stretch a timeout.
 - **Cancellation.** A cancelled `context.Context` wakes a blocked read at once
@@ -232,7 +291,9 @@ The block number is 16 bits. RFC 1350 does not say what happens after block
 65535, so this implementation stops with `ErrTransferTooLarge` instead of
 guessing. With 512-byte blocks the largest file that can be sent is therefore
 33,553,919 bytes (about 32 MiB); a file that would need block 65536 is
-rejected. This follows from the code, not from the RFC.
+rejected. This follows from the code, not from the RFC. In netascii the limit
+counts bytes on the wire, which are more than the bytes of the file, so the
+largest text file is smaller.
 
 ### Request limits
 
@@ -285,7 +346,7 @@ Status: **Yes** implemented and tested; **Partial**; **No** not implemented.
 | An empty last block when the size is a multiple of 512 | §6 | Yes | `TestTransferSizes`; capture: 0-byte and 512-byte files |
 | Block numbers start at 1; ACK 0 answers a WRQ | §4 | Yes | `TestServerGet`, `TestServerPut`; capture |
 | Packet formats and opcodes 1-5 | §5 | Yes | `TestParse*`, `TestAckMarshal`, `TestDataMarshal`, `TestErrorMarshal`, `TestRequestMarshal`, round-trip tests, `FuzzParse` |
-| Mode is case-insensitive | §5 | Yes | `TestParseRequest`, `TestLowerASCII` |
+| Mode is case-insensitive | §5 | Yes | `TestParseRequest`, `TestLowerASCII`; `TestNetasciiClientRoundTrip` (client mode `NetAscii`) |
 | Server answers from a new port (its TID) | §4 | Yes | `TestServerAnswersFromNewPortAndChecksTID`; capture |
 | Packets from another TID get ERROR 5; the transfer goes on | §4 | Yes | `TestStrangerGetsErrorAndTransferContinues` |
 | ERROR is not acknowledged or repeated; a lost one is found by timeout | §2 | Yes | `TestRemoteErrorEndsTransfer`, `TestScenarioLostErrorPacket` |
@@ -293,7 +354,7 @@ Status: **Yes** implemented and tested; **Partial**; **No** not implemented.
 | Dallying after the final ACK (encouraged) | §6 | Yes | `TestClientGetDally`, `TestScenarioLostFinalAckOnGet`, `TestScenarioLostFinalAckOnPut` |
 | Premature termination by ERROR (a courtesy, not guaranteed) | §7 | Yes | `TestClientGetWriterError`, `TestServerPutAbortedIsRemoved` |
 | Error codes 0-7 | appendix | Yes | `TestErrorCodeValues`; server tests for codes 1, 2, 4, 6 |
-| Mode `netascii` | §5 | Yes | `TestNetasciiEncode`, `TestNetasciiDecode`, `TestNetasciiServerSendsWireForm`, `TestNetasciiServerReceivesWireForm`, `TestNetasciiClientRoundTrip`; line end is CR LF on the wire, a lone CR is sent as CR NUL |
+| Mode `netascii`: line end is CR LF on the wire, a lone CR is CR NUL, the receiver converts to its own format | §1, §5 | Yes | `TestNetasciiEncode`, `TestNetasciiDecode`, `TestNetasciiDecodeSplitAtEveryPoint`, `TestNetasciiServerSendsWireForm`, `TestNetasciiServerReceivesWireForm`, `TestNetasciiClientRoundTrip`, `TestNetasciiRoundTripRandom`, `FuzzNetascii`; by hand against `tftp-hpa`, both directions (see [Evidence](#netascii-against-tftp-hpa-by-hand-no-capture)) |
 | Mode `mail` | §5 | Refused | ERROR 4; RFC 1123 says it SHOULD NOT be supported |
 | Security considerations: the protocol has no access control | Security | Yes | see [Security](#security) |
 
@@ -303,13 +364,14 @@ Status: **Yes** implemented and tested; **Partial**; **No** not implemented.
 |---|---|---|---|---|
 | Fix the Sorcerer's Apprentice Syndrome: never resend DATA on a duplicate ACK | 4.2.3.1 | MUST | Yes | `TestSenderIgnoresDuplicateAck`, `TestScenarioDuplicateAckDoesNotResendData`, `TestScenarioDuplicateDataIsHarmless`, `TestScenarioDuplicateDataOnPut` (they count DATA packets on the wire) |
 | Adaptive timeout, at least exponential backoff | 4.2.3.2 | MUST | Yes (backoff only) | `TestSenderGivesUp`, `TestScenarioLostDataTwice` |
-| Support `netascii` | RFC 783 | MUST | Yes | same tests, plus `FuzzNetascii`; checked with our own client and server only, not yet against another implementation |
+| Support `netascii` | RFC 783 | MUST | Yes | the netascii tests above, `FuzzNetascii`, and a hand check against `tftp-hpa` in both directions |
 | Support `octet` | RFC 783 | MUST | Yes | all transfer tests |
 | Do not support `mail` | 4.2.2.1 | SHOULD NOT | Yes | `TestServerModes` |
 | Configurable access control over path names | 4.2.3.4 | SHOULD | Partial | one served root (`os.Root`) and a write switch; no per-user or per-path rules |
-| Silently ignore requests sent to a broadcast address | 4.2.3.5 | SHOULD | **Yes** | `Serve` refuses a socket bound to a wildcard address; a socket bound to one unicast address does not receive broadcast.|
+| Silently ignore requests sent to a broadcast address | 4.2.3.5 | SHOULD | Yes | `Serve` refuses a socket bound to a wildcard address; a socket bound to one unicast address does not receive broadcast. |
 
-
+Every MUST in this table is implemented. The one SHOULD that is only partly met
+is access control by path name (see the row above).
 
 ### RFC 2347, 2348, 2349: option extensions
 
@@ -333,6 +395,11 @@ refusing to overwrite files; writes off by default; `MaxTransfers`; the 516-byte
 limit on ERROR packets; rejecting duplicate options; ignoring a repeated request
 while its transfer runs.
 
+For netascii: the host line end is taken from `runtime.GOOS`; bytes above 0x7F
+pass through; a CR followed by anything but LF or NUL, and a lone LF, are kept
+as they are instead of being refused; on a CR LF host a lone LF is sent as
+CR LF.
+
 ## Testing
 
 Run everything:
@@ -349,7 +416,8 @@ The suite is organised in layers; each layer catches a different kind of bug.
 | Layer | Files | What it proves |
 |---|---|---|
 | **Unit tests** | `packet_test.go` | Every parser and encoder, table-driven: valid input, truncated and oversized input, boundaries (a request of 512 bytes is accepted, 513 is not), a zero byte inside a field, duplicate options, mixed-case modes, round trips (`parse(marshal(x)) == x`), and that parsed payloads do not alias the receive buffer. |
-| **Fuzzing** | `fuzz_test.go` | `FuzzParse` feeds arbitrary bytes to `Parse`. It must never panic, and anything it accepts must survive marshal, parse, marshal unchanged. |
+| **Fuzzing** | `fuzz_test.go`, `netascii_test.go` | `FuzzParse` feeds arbitrary bytes to `Parse`. It must never panic, and anything it accepts must survive marshal, parse, marshal unchanged. `FuzzNetascii`: for any file and for both host line ends, the wire form obeys the netascii rules (every CR is followed by LF or NUL, every LF follows a CR), decoding it gives the file back (a CR LF host gets every line end as CR LF), and decoding arbitrary bytes gives the same result however they are cut into blocks. |
+| **Netascii tests** | `netascii_test.go` | The encoder and the decoder for an LF host and for a CR LF host on every platform (the line end is a parameter). Table of cases: empty, lone CR, CR LF in a file, CR at the end, CR CR LF, bytes above 0x7F. Reads of one byte, half reads, data returned together with EOF; the source's error is passed on. Decoding cut at every possible point. 3000 random files make a round trip. Then through the real server on a raw socket: exact DATA payloads, CR ending block 1 with LF starting block 2, a wire form of exactly one block followed by an empty block. The real client against the real server, including a failing writer and unknown modes. |
 | **Engine tests** | `transfer_test.go` | The lock-step engine between two sockets: file sizes from 0 to 51201 bytes, packet loss, a packet from a wrong TID, duplicate ACK and DATA, an oversized datagram, a peer that goes silent (exactly 1 + `Retries` datagrams are sent), context cancellation, a remote ERROR, and the 65535-block limit in both directions. |
 | **Client tests** | `client_test.go` | The client against a small in-test server written straight from RFC 1350: downloads and uploads of boundary sizes, loss, file not found, a failing writer, a denied upload, a silent server, cancellation, bad arguments, and the dally timing. |
 | **Server tests** | `server_test.go`, `scenario_test.go` | The real `Client` against the real `Server`. Includes 20 clients at once, path traversal attempts (`..`, absolute paths, backslashes, symbolic links) for reads and writes, no overwriting, aborted uploads removed, mode and option handling, answers from a new port, junk on the request port, `MaxTransfers`, and shutdown during a transfer. |
@@ -361,11 +429,17 @@ The suite is organised in layers; each layer catches a different kind of bug.
 
 ```bash
 go test -run='^$' -fuzz=FuzzParse -fuzztime=30s .
+go test -run='^$' -fuzz=FuzzNetascii -fuzztime=30s .
 ```
 
-Plain `go test` runs the fuzz target on its seed inputs only. An input that
-makes the fuzzer fail is saved in `testdata/fuzz/FuzzParse/` and then runs as a
-regression test on every `go test`; keep such files in the repository.
+Go runs one fuzz target at a time. Plain `go test` runs the fuzz targets on
+their seed inputs only. An input that makes the fuzzer fail is saved in
+`testdata/fuzz/<target>/` and then runs as a regression test on every
+`go test`; keep such files in the repository.
+
+If the counter of executions stands still for many seconds, the fuzzer is
+minimizing a new input, which counts as no executions. `-fuzzminimizetime=0`
+turns that off.
 
 ### Scenario tests
 
@@ -406,7 +480,9 @@ current one.
 ### Not covered by automated tests
 
 - `ListenAndServe` (the tests call `Serve`).
-- The programs in `cmd/`.
+- The programs in `cmd/` have no test files. They were run by hand: the
+  captures below were made with them, and a get, a put, a refused overwrite and
+  a missing remote file behaved as described in [Quick start](#quick-start).
 - IPv6.
 - Any network other than the loopback interface.
 
@@ -421,6 +497,10 @@ client and the server were also run against `tftp-hpa` (Ubuntu package, client
 |---|---|---|
 | `testdata/pcap/hpa-get-put.pcap` | `tftp-hpa` client against our server | 43 |
 | `testdata/pcap/ours-vs-hpa-server.pcap` | our client against the `tftp-hpa` server | 873 |
+
+Both captures are in `octet` mode. Netascii was checked separately, by hand
+(see [below](#netascii-against-tftp-hpa-by-hand-no-capture)); it has no capture
+yet.
 
 Both captures were taken on the loopback interface with
 `tcpdump -i lo -w FILE 'udp and not port 53'`.
@@ -440,7 +520,7 @@ TFTP*.
 
 `tftp -m binary 127.0.0.1 6969 -c get a.bin` and then `put`, with a 5000-byte
 file. The `-m binary` option selects octet mode; the default of `tftp-hpa` is
-netascii
+netascii, so the capture needs this option.
 
 | Packets | Observation |
 |---|---|
@@ -480,6 +560,36 @@ contains: no retransmissions occurred.
 In this capture each download starts about 2 seconds after the previous one.
 That is the client's dally (twice the 1 s timeout), not a delay of the server.
 
+### Netascii against `tftp-hpa` (by hand, no capture)
+
+Checked on the loopback interface with `tftp-hpa` 5.2+20150808 (the Ubuntu 24.04
+packages `tftp-hpa` and `tftpd-hpa`; client `tftp`, server `in.tftpd`), in both
+directions and in both roles, with the same seven text files each time. In all
+28 transfers the result was identical to the original (`cmp`).
+
+| File | Why it is there |
+|---|---|
+| empty, and `hello` + LF | smallest cases |
+| 2000 lines, 137962 bytes | many blocks |
+| 510 `x` + LF | the wire form is exactly 512 bytes, so an empty last block is needed |
+| 511 `x` + LF + `z` + LF | CR is the 512th wire byte and ends block 1; LF starts block 2 |
+| `a`, CR, `b`, CR LF, `c`, LF | a lone CR (sent as CR NUL) next to real line ends |
+| 100 lines of Polish UTF-8 | bytes above 0x7F |
+
+```bash
+# hpa client against our server (our server on 6969, files in ROOT)
+tftp 127.0.0.1 6969 -m ascii -c get FILE
+tftp 127.0.0.1 6969 -m ascii -c put FILE REMOTE
+
+# our client (Client{Mode: tftp.ModeNetascii}) against the hpa server
+in.tftpd -4 -L -c -s -a 127.0.0.1:6970 -u root ROOT
+```
+
+Limits of this check: the host was Linux, so every file used LF and came back
+byte for byte; a CR LF host was not tried. No packets were recorded. A
+capture of one netascii transfer, in each direction, would show the CR LF and
+CR NUL forms on the wire.
+
 ## Limitations and not yet verified
 
 Not implemented:
@@ -488,6 +598,12 @@ Not implemented:
 - Adaptive timeout based on measured round-trip times (only exponential
   backoff).
 - Block numbers beyond 65535 (the transfer is stopped).
+
+Known gaps:
+
+- The `tftp` program has no mode flag, so it always transfers in `octet`.
+  Netascii is reachable only through the library (`Client.Mode`) and, on the
+  server side, by any client that asks for it.
 
 Known weaknesses:
 
@@ -504,6 +620,9 @@ Not verified:
 
 - Behaviour on any system other than Linux with Go 1.26 or newer.
 - Interoperability with servers and clients other than `tftp-hpa`.
+- Netascii on a host whose line end is CR LF (the conversion is tested with
+  both line ends, but only an LF host was run end to end).
+- A packet capture of a netascii transfer.
 - Transfers over a real network, as opposed to the loopback interface.
 
 

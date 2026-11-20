@@ -16,14 +16,16 @@ import (
 
 const defaultMaxTransfers = 100
 
-// Server serves the files under Root over TFTP (RFC 1350), octet mode only.
+// Server serves the files under Root over TFTP (RFC 1350), in octet and
+// netascii modes.
 //
 // Defaults are chosen to be safe: files are read-only, and nothing outside
 // Root can be reached. The zero value of every field except Root is valid.
 //
-// Not supported yet: netascii mode (RFC 1123 requires it), options (they are
-// ignored, which RFC 2347 allows), and ignoring requests sent to a broadcast
-// address (RFC 1123 SHOULD; bind to one unicast address to avoid them).
+// Not supported yet: options (they are ignored, which RFC 2347 allows).
+// Requests sent to a broadcast address are never seen, because Serve refuses a
+// socket bound to a wildcard address (RFC 1123 SHOULD): listen on one unicast
+// address.
 type Server struct {
 	// Root is the directory that is served. Required.
 	Root string
@@ -147,9 +149,7 @@ func (s *Server) Serve(ctx context.Context, conn net.PacketConn) error {
 			refuse(conn, from, "server busy")
 			continue
 		}
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			defer func() { <-slots }()
 			defer func() {
 				mu.Lock()
@@ -157,7 +157,7 @@ func (s *Server) Serve(ctx context.Context, conn net.PacketConn) error {
 				mu.Unlock()
 			}()
 			s.handle(ctx, conn, root, lg, req, from)
-		}()
+		})
 
 	}
 }
