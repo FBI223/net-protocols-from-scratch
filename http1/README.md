@@ -1,151 +1,190 @@
-# HTTP/1.1 in Go (RFC 9112)
+# http1
 
-An HTTP/1.1 message parser, body framing and a small server, written from the
-specification without `net/http`. The network code uses only `net` and `bufio`
-from the Go standard library.
+An HTTP/1.1 server written from scratch in Go, on top of `net.Conn`, with no
+use of `net/http` in the implementation. It follows
+[RFC 9112](https://www.rfc-editor.org/rfc/rfc9112) (message syntax) and
+[RFC 9110](https://www.rfc-editor.org/rfc/rfc9110) (semantics).
 
-**Status: Planned.** The layout, the scope and the test plan below are fixed;
-there is no protocol code yet. This README is updated with results after they
-exist, never before.
+The goal is to learn the protocol by building it, but with production habits:
+a strict parser, bounded resources, and the nasty parts of HTTP (request
+smuggling, slow clients, oversized input) handled deliberately and tested.
 
-**Specification:** RFC 9112 (HTTP/1.1 syntax and framing), RFC 9110 (semantics),
-RFC 9293 (TCP, used through sockets), RFC 2119 and 8174 (the words MUST,
-SHOULD, MAY). Reading order and section numbers: [`rfcs/http1-rfc-notes.md`](rfcs/http1-rfc-notes.md).
+Requires Go 1.24 or newer (`os.Root` is used for safe file serving).
 
-**Verify with:** `curl`, `nc`, `wrk`, `k6`, Wireshark.
+## Quick start
 
-- [Scope](#scope)
-- [Layout](#layout)
-- [Design](#design)
-- [Security rules](#security-rules)
-- [Test plan](#test-plan)
-- [How to run](#how-to-run)
-- [Benchmarks](#benchmarks)
-- [Limitations](#limitations)
+```go
+rt := &http1.Router{}
+rt.HandleFunc("GET", "/hello/{name}", func(w *http1.ResponseWriter, r *http1.Request) {
+	fmt.Fprintf(w, "Hello, %s!\n", r.PathValue("name"))
+})
 
-## Scope
+srv := &http1.Server{Addr: ":8080", Handler: rt}
+log.Fatal(srv.ListenAndServe())
+```
 
-Planned:
+Or run the demo server:
 
-- A TCP server with read and write deadlines and graceful shutdown.
-- Request line and header parser with size limits.
-- Body framing: `Content-Length` and `chunked` (reading and writing).
-- Keep-alive and `Connection: close`.
-- A small router with a few routes.
-- A way for a handler to take over the connection (the WebSocket handshake in
-  `websocket/` needs it).
+```sh
+go run ./cmd/httpd -addr :8080 -root ./testdata -list
+```
+
+```sh
+curl localhost:8080/hello/Ola
+curl -X PUT -d '{"a":1}' localhost:8080/kv/test     # JSON key-value store
+curl localhost:8080/kv/test
+curl localhost:8080/files/                          # static files from -root
+curl -N localhost:8080/stream                       # chunked, flushed per line
+```
+
+Other ways to expose it:
+
+```sh
+go run ./cmd/httpd -unix /tmp/httpd.sock            # curl --unix-socket /tmp/httpd.sock http://x/
+go run ./cmd/httpd -addr :8443 -tls-self-signed     # curl -k https://localhost:8443/
+go run ./cmd/httpd -addr :8443 -tls-cert c.pem -tls-key k.pem
+```
+
+`httpd -h` lists the limit flags (`-max-body`, `-max-conns`,
+`-read-header-timeout`, `-idle-timeout`, `-shutdown-grace`). Ctrl+C drains
+running requests; a second Ctrl+C quits at once.
+
+## What is implemented
+
+| Area | Details |
+|---|---|
+| Request line | origin, absolute, authority (`CONNECT`) and asterisk forms; HTTP/1.0 and 1.1 |
+| Headers | strict field names and values, canonical keys, repeated headers kept in order |
+| Framing | `Content-Length` and `Transfer-Encoding: chunked`, trailers validated and discarded |
+| Connections | keep-alive, pipelining, `Connection: close`, HTTP/1.0 close-delimited responses |
+| `Expect: 100-continue` | interim response sent only when the handler reads the body |
+| Responses | automatic `Content-Length` or chunked framing, `Date`, HEAD/204/304 rules, flush |
+| Errors | parse errors carry their status (400, 408, 413, 414, 431, 501, 505) and close the connection |
+| Router | `{name}` and `{name...}` wildcards, automatic 404, 405 + `Allow`, HEAD and OPTIONS |
+| File server | content types, `ETag`, `Last-Modified`, `If-None-Match`, `If-Modified-Since`, `Range`, `If-Range`, listings |
+| Lifecycle | `Shutdown` (graceful), `Close`, connection limit, panic recovery |
+| Transports | any `net.Listener`: TCP, Unix socket, TLS via `tls.NewListener` |
+
+Not implemented: HTTP/2 and HTTP/3, compression, multiple byte ranges,
+`Upgrade` (WebSocket), sending trailers, and HTTP proxy or caching behaviour.
+
+## Safety design
+
+- **Strict parsing.** Bare CR or LF, obsolete line folding, whitespace before
+  the colon, a missing or repeated `Host`, a bad `Content-Length`, and a message
+  with both `Content-Length` and `Transfer-Encoding` are all rejected. Two
+  servers that read the same bytes differently is what makes request smuggling
+  possible, so ambiguity is an error rather than a guess.
+- **A parse error ends the connection.** After one, the framing of the stream
+  can no longer be trusted. The error response is sent first, with a lingering
+  close so the client does not lose it to a TCP reset.
+- **Everything is bounded.** `Limits` covers request line, header bytes and
+  count, body size (also for chunked), chunk-size lines, and four timeouts:
+  headers (slow-loris defence), body, idle and write. The deadline for headers
+  covers the whole head, so dripping one byte at a time does not help.
+- **Safe paths.** The router decodes segments and answers 400 for `.`, `..`,
+  bad percent-escapes and control characters. The file server opens files
+  through `os.Root`, so symlinks cannot lead outside the directory.
+- **No header injection.** Response header names and values that contain
+  forbidden characters are dropped.
 
 ## Layout
 
-```
-http1/
-├── doc.go           package overview and the layers
-├── errors.go        errors and their status codes
-├── limits.go        every bound on untrusted input, in one struct
-├── header.go        header fields
-├── request.go       request line and header section
-├── response.go      status line, header section, response writer
-├── body.go          where a body ends (RFC 9112 section 6.3), Content-Length
-├── chunked.go       chunked coding
-├── conn.go          one connection: loop, keep-alive, deadlines
-├── router.go        method and path to handler
-├── server.go        accept loop, shutdown, taking over a connection
-├── *_test.go        one test file per source file, plus fuzz_test.go
-├── cmd/httpd/       the server program
-├── rfcs/            fetch-rfcs.sh and the reading notes
-└── testdata/
-    ├── requests/    raw requests, valid and invalid (see its README)
-    └── pcap/        captures of runs against real tools
-```
-
-## Design
-
-```
-  cmd/httpd
-      |
-  server.go  conn.go  router.go     sockets, deadlines, keep-alive
-      |
-  body.go  chunked.go               where a body ends; chunked coding
-      |
-  request.go  response.go           start line + header section, on bufio
-      |
-  errors.go  limits.go  header.go   values and rules, no I/O
-```
-
-A layer uses only the layers below it, so the lower three can be tested with
-`strings.NewReader` and no sockets, as the TFTP codec is.
-
-Rules that shape the code (decisions are recorded in
-[`rfcs/http1-rfc-notes.md`](rfcs/http1-rfc-notes.md)):
-
-- **Strict, not forgiving.** A message that cannot be framed with certainty is
-  rejected, not repaired.
-- **Bounds before allocation.** No length from the network sizes a buffer
-  before it is checked against `Limits`.
-- **Streams, not buffers.** A body is an `io.Reader`; a handler can read a large
-  upload without it being held in memory.
-- **A parser reads exactly one message.** Bytes after it belong to the next
-  request and stay in the `bufio.Reader`.
-- **Timeouts at every stage.** Waiting for the request line, for the rest of the
-  headers, for the body, for the next request on an idle connection, and for the
-  client to read the response, each with its own limit.
-
-## Security rules
-
-Each rule has a file in [`testdata/requests/`](testdata/requests/README.md) and a
-test. The rules come from RFC 9112 sections 2.2, 5, 6 and 11.
-
-| Threat | Rule |
+| File | Purpose |
 |---|---|
-| Request smuggling (`Content-Length` with `Transfer-Encoding`, repeated or invalid `Content-Length`) | reject the request |
-| Differences in line ends (bare LF, bare CR) | reject |
-| Obsolete line folding, whitespace before the colon, NUL in a value | reject |
-| Missing or repeated `Host` | 400 |
-| Huge request line, headers or chunk sizes | 414, 431, or a closed connection; no allocation first |
-| Slow clients that send a few bytes at a time | per-stage deadlines |
-| Many connections | limit on simultaneous connections |
+| `errors.go`, `limits.go` | `ParseError` and sentinel errors; `Limits` and defaults |
+| `header.go`, `request.go` | header map and field parsing; request-line and head parsing (`ReadRequest`) |
+| `body.go`, `chunked.go` | body framing rules; the chunked decoder |
+| `response.go` | `ResponseWriter`, framing choice, status texts |
+| `conn.go`, `server.go` | one connection's life cycle; `Server`, `Serve`, `Shutdown` |
+| `router.go`, `fileserver.go` | routing; static files |
+| `cmd/httpd/` | demo server: flags, transports, JSON key-value API |
+| `interop/` | script and clients that test the server with other people's HTTP software |
+| `testdata/requests/` | corpus of raw requests and `expect.json` (see below) |
 
-## Test plan
+## Testing
 
-Written before the code, one layer at a time. Nothing in this table exists yet.
-
-| Layer | File | What it will prove |
-|---|---|---|
-| Unit | `header_test.go` | field-name syntax, case-insensitive lookup, repeated fields, trimming, forbidden bytes |
-| Unit | `request_test.go` | request line, target forms, versions, limits, and every file in `testdata/requests` |
-| Unit | `response_test.go` | status line and fields as written; `Content-Length` or chunked chosen correctly |
-| Unit | `body_test.go` | every case of RFC 9112 section 6.3; a short body is an error; bytes after the body are not consumed |
-| Unit | `chunked_test.go` | hex sizes, extensions, trailers, truncated input, huge sizes, a round trip |
-| Property | `request_test.go` | the same bytes cut into pieces at every possible point give the same result |
-| Fuzz | `fuzz_test.go` | `FuzzReadRequest` and `FuzzChunkedReader` never panic; what they accept survives write and read again |
-| Server | `server_test.go` | real TCP on `127.0.0.1`: keep-alive, `Connection: close`, slow headers, oversized input, graceful shutdown |
-| Leak | `server_test.go` | after many good, failing and aborted connections no goroutine and no file descriptor remains |
-| Real tools | `testdata/pcap/` | `curl` and `wrk` against `httpd`, with captures |
-
-`http1_test.go` and the current `fuzz_test.go` contain skipped placeholders;
-they are replaced by the files above.
-
-## How to run
-
-```bash
-go test -race -count=1 ./http1/...
-go test -run='^$' -fuzz=FuzzReadRequest -fuzztime=30s ./http1/    # when the target exists
-bash rfcs/fetch-rfcs.sh                                           # from this folder
+```sh
+go vet ./...
+go test -race ./...                         # everything, about 6 seconds
+go test -run TestCorpus -v ./...            # the raw-request corpus
+go test -run '^$' -bench . -benchmem ./     # benchmarks against net/http
 ```
 
-Once the server exists:
+Fuzz targets run one at a time:
 
-```bash
-go run ./http1/cmd/httpd -addr 127.0.0.1:8080
-curl -v http://127.0.0.1:8080/hello
+```sh
+go test -run '^$' -fuzz FuzzReadRequest -fuzztime 30s ./
 ```
 
-## Benchmarks
+Targets: `FuzzReadRequest`, `FuzzParseHeaderLine`, `FuzzChunked`,
+`FuzzRequestVsStdlib`, `FuzzRouterPath`, `FuzzServeConn`. Several compare the
+result with `net/http`, so a disagreement between the two is reported. Inputs
+that crash a target are saved under `testdata/fuzz/` and then run as ordinary
+tests.
 
-None measured yet. The numbers will go here together with the exact command
-and the machine, for example `wrk -t2 -c100 -d30s http://127.0.0.1:8080/hello`.
+The test suite has five layers:
 
-## Limitations
+1. **Unit tests** for each file (parser, headers, bodies, chunked decoder,
+   response writer, router, file server).
+2. **A corpus** of 256 raw requests in `testdata/requests/{valid,invalid}`,
+   byte for byte, with the expected outcome of each in `expect.json`. They are
+   checked both against the parser and over a real connection. Regenerate them
+   with `python3 gen_corpus.py` in that directory; it recreates `valid/` and
+   `invalid/`. The `.gitattributes` there keeps CRLFs intact.
+3. **Fuzzing**, seeded from the corpus.
+4. **System tests** (`system_test.go`): every transport, many concurrent
+   clients, requests delivered byte by byte, slow-loris, smuggling attempts,
+   shutdown under load, clients that vanish or never read, connection limits.
+5. **Interoperability tests** (`interop/`), described next.
 
-None to report yet. This section grows with the code: what is not implemented,
-and what has not been verified.
+## Interoperability
+
+Tests written by the author of a parser share the author's misreadings. To
+catch those, `run.sh` starts `cmd/httpd` and talks to it with HTTP
+software written by other people:
+
+```sh
+interop/run.sh
+```
+
+| Client | What it checks |
+|---|---|
+| curl | GET, POST, chunked POST, PUT/GET/DELETE, download with SHA-256, `Range`, keep-alive (one connection for two URLs), 404, path traversal, HTTP/1.0; over TCP, a Unix socket and TLS |
+| wget | GET and POST |
+| nc, `openssl s_client` | hand-typed bytes over TCP and TLS, including a missing `Host` and `Content-Length` together with `Transfer-Encoding` (both must give 400) |
+| Python `requests`, `http.client` | the same scenarios, chunked upload from a generator, three requests on one connection, an unknown method |
+| Node `http`, `fetch` | chunked and sized uploads, five requests on one socket |
+| Ruby `Net::HTTP` | sized and chunked POST, JSON store, twenty requests on one connection |
+
+Clients that are not installed are skipped, and the script ends with a count
+of passed, failed and skipped checks. On Linux and macOS it needs `bash`, `go`
+and whichever of the clients above exist (`apt install curl wget netcat-openbsd
+openssl`, or `brew install` the same).
+
+To try other platforms or clients by hand, start the server on a reachable
+address and point the client at it:
+
+```sh
+go run ./cmd/httpd -addr 0.0.0.0:8080 -root ./testdata -list   # find your IP with `ip a` or `ipconfig`
+```
+
+```powershell
+# Windows PowerShell
+Invoke-WebRequest http://SERVER_IP:8080/hello/Ola
+Invoke-RestMethod -Method Put -Body '{"a":1}' http://SERVER_IP:8080/kv/test
+curl.exe -v http://SERVER_IP:8080/headers          # curl.exe ships with Windows 10+
+```
+
+A browser is a good client too (Firefox, Chrome, Safari): open
+`http://SERVER_IP:8080/files/` with `-list`, and check the Network tab for
+keep-alive and chunked responses. For load, `ab -n 10000 -c 50 URL`,
+`wrk -t2 -c50 -d10s URL` or `hey` work as they would against any server (use
+`ab -k` to keep connections alive). To see the bytes themselves, capture on the
+loopback interface in Wireshark with the filter `tcp.port == 8080`.
+
+## Further reading
+
+The RFCs this is built on are 9110 and 9112. Good places to start in 9112 are
+section 2 (message format), section 6 (message body and framing, including the
+smuggling rules in 6.3) and section 9 (connection management).

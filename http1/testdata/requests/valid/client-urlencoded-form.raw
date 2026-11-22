@@ -1,0 +1,6 @@
+POST /form HTTP/1.1
+Host: h
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 39
+
+a=1&b=hello+world&c=%C5%BC%C3%B3%C5%82w

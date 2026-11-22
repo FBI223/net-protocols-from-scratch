@@ -1,5 +1,0 @@
-GET / HTTP/1.1
-hOsT:   example.test  
-X-Multi: a
-X-Multi: b
-

@@ -1,0 +1,3 @@
+GET / HTTP/a.b
+Host: h
+

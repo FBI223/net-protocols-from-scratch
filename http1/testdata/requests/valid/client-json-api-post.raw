@@ -1,0 +1,8 @@
+POST /api/items HTTP/1.1
+Host: h
+Content-Type: application/json
+Content-Length: 38
+Accept: application/json
+Authorization: Bearer abc.def.ghi
+
+{"name":"Zoë","tags":["a","b"],"n":1}

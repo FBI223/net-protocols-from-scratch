@@ -23,18 +23,18 @@ Grouped by network layer. Every directory has its own `README.md`.
 | [`tftp/`](tftp/) | Go | TFTP, RFC 1350 with options (RFC 2347, 2348, 2349) | **In progress** | done: RFC 1350 in octet and netascii modes: packet codec, lock-step transfer engine, client (Get/Put), server (ListenAndServe), unit, fuzz and packet-loss tests, interoperability with `tftp-hpa` (see [`tftp/README.md`](tftp/README.md)); next: options (RFC 2347, 2348, 2349); RFC texts in `tftp/rfcs/` | `tftp`, `tftpd` |
 | [`arp/`](arp/) | Go | ARP, RFC 826 | Planned | packet codec, cache, responder | `arping` |
 | [`icmp/`](icmp/) | Go | ICMP, RFC 792 | Planned | packet codec, raw sockets, ping, traceroute | `ping`, `traceroute` |
-| [`packet-parser/`](packet-parser/) | Rust | Ethernet, IPv4, ARP, ICMP, UDP, TCP, pcap | Planned | layered parser, checksums, pcap reader | `arpwatch`, `ping`, `traceroute` |
-| [`reliable-udp/`](reliable-udp/) | Rust | reliable transport over UDP (design references: RFC 768, 6298, 5681) | Planned | sequence numbers, sliding window, RTT estimation, congestion control | `rudp-send`, `rudp-recv` |
+| [`todo_later/packet-parser`](todo_later/packet-parser/) | Rust | Ethernet, IPv4, ARP, ICMP, UDP, TCP, pcap | Planned | layered parser, checksums, pcap reader | `arpwatch`, `ping`, `traceroute` |
+| [`todo_later/reliable-udp`](todo_later/reliable-udp/) | Rust | reliable transport over UDP (design references: RFC 768, 6298, 5681) | Planned | sequence numbers, sliding window, RTT estimation, congestion control | `rudp-send`, `rudp-recv` |
 | [`dns/`](dns/) | Go + Rust | DNS, RFC 1034 / 1035 (EDNS(0), RFC 6891) | Planned | message and name codec, cache, resolver, zones, server; Rust version in [`dns/rust/`](dns/rust/) | `dnsd` (Go), `dns-server` (Rust) |
-| [`mdns/`](mdns/) | Go | mDNS, RFC 6762 | Planned | codec, cache, responder, browser | `mdnsd` |
+| [`todo_later/mdns`](todo_later/mdns/) | Go | mDNS, RFC 6762 | Planned | codec, cache, responder, browser | `mdnsd` |
 | [`ntp/`](ntp/) | Go | NTP, RFC 5905 (SNTP, RFC 4330) | Planned | packet codec, client, server | `ntpd`, `sntp` |
 | [`http1/`](http1/) | Go | HTTP/1.1, RFC 9112 | Planned | request and response parsing, chunked encoding, server | `httpd` |
-| [`http2/`](http2/) | Rust | HTTP/2, RFC 9113; HPACK, RFC 7541 | Planned | frames, HPACK with Huffman, streams, flow control | `h2c-server` |
+| [`todo_later/http2`](todo_later/http2/) | Rust | HTTP/2, RFC 9113; HPACK, RFC 7541 | Planned | frames, HPACK with Huffman, streams, flow control | `h2c-server` |
 | [`websocket/`](websocket/) | Go | WebSocket, RFC 6455 | Planned | handshake, frame codec, connection, server | `wsecho` |
-| [`reverse-proxy/`](reverse-proxy/) | Rust | HTTP reverse proxy and load balancer | Planned | configuration, router, balancer, health checks | `reverse-proxy` |
-| [`mqtt/`](mqtt/) | Go | MQTT (OASIS) | Planned | packet codec, broker, client, sessions | `mqttd` |
-| [`resp/`](resp/) | Go | RESP (Redis wire protocol) | Planned | parser, writer, commands, in-memory store | `respd` |
-| [`tls-clienthello/`](tls-clienthello/) | Rust | TLS records and ClientHello (RFC 8446), JA3 | Planned | record, handshake and extension parsing, JA3 | library only |
+| [`todo_later/reverse-proxy`](todo_later/reverse-proxy/) | Rust | HTTP reverse proxy and load balancer | Planned | configuration, router, balancer, health checks | `reverse-proxy` |
+| [`todo_later/mqtt`](todo_later/mqtt/) | Go | MQTT (OASIS) | Planned | packet codec, broker, client, sessions | `mqttd` |
+| [`todo_later/resp`](todo_later/resp/) | Go | RESP (Redis wire protocol) | Planned | parser, writer, commands, in-memory store | `respd` |
+| [`todo_later/tls-clienthello`](todo_later/tls-clienthello/) | Rust | TLS records and ClientHello (RFC 8446), JA3 | Planned | record, handshake and extension parsing, JA3 | library only |
 
 ## Why two languages
 

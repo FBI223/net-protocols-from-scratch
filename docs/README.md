@@ -35,11 +35,11 @@ at the packet level, not to replace production libraries.
 
 | # | Protocol | RFC | Where |
 |---|---|---|---|
-| 6 | Ethernet, ARP, IPv4, ICMP, UDP, TCP headers | [826](https://www.rfc-editor.org/rfc/rfc826), [791](https://www.rfc-editor.org/rfc/rfc791), [792](https://www.rfc-editor.org/rfc/rfc792), [768](https://www.rfc-editor.org/rfc/rfc768) | [`packet-parser`](../packet-parser) |
+| 6 | Ethernet, ARP, IPv4, ICMP, UDP, TCP headers | [826](https://www.rfc-editor.org/rfc/rfc826), [791](https://www.rfc-editor.org/rfc/rfc791), [792](https://www.rfc-editor.org/rfc/rfc792), [768](https://www.rfc-editor.org/rfc/rfc768) | [`packet-parser`](../todo_later/packet-parser) |
 | 7 | NTP | [5905](https://www.rfc-editor.org/rfc/rfc5905) | [`ntp`](../ntp) |
 | 8 | STUN | [8489](https://www.rfc-editor.org/rfc/rfc8489) | [`go/stun`](go/stun) |
-| 9 | TLS 1.3 ClientHello (parser only) | [8446](https://www.rfc-editor.org/rfc/rfc8446) | [`tls-clienthello`](../tls-clienthello) |
-| 10 | Reliable transport over UDP | inspired by [9293](https://www.rfc-editor.org/rfc/rfc9293), [9000](https://www.rfc-editor.org/rfc/rfc9000) | [`reliable-udp`](../reliable-udp) |
+| 9 | TLS 1.3 ClientHello (parser only) | [8446](https://www.rfc-editor.org/rfc/rfc8446) | [`tls-clienthello`](../todo_later/tls-clienthello) |
+| 10 | Reliable transport over UDP | inspired by [9293](https://www.rfc-editor.org/rfc/rfc9293), [9000](https://www.rfc-editor.org/rfc/rfc9000) | [`reliable-udp`](../todo_later/reliable-udp) |
 | 11 | GRE and VXLAN | [2784](https://www.rfc-editor.org/rfc/rfc2784), [7348](https://www.rfc-editor.org/rfc/rfc7348) | [`rust/gre-vxlan`](rust/gre-vxlan) |
 
 ### Level 3 · Routing and telemetry
@@ -58,7 +58,7 @@ at the packet level, not to replace production libraries.
 | 16 | RADIUS (with accounting) | [2865](https://www.rfc-editor.org/rfc/rfc2865), [2866](https://www.rfc-editor.org/rfc/rfc2866) | [`go/radius`](go/radius) |
 | 17 | SIP + SDP | [3261](https://www.rfc-editor.org/rfc/rfc3261), [8866](https://www.rfc-editor.org/rfc/rfc8866) | [`go/sip`](go/sip) |
 | 18 | RTP / RTCP | [3550](https://www.rfc-editor.org/rfc/rfc3550) | [`go/rtp`](go/rtp) |
-| 19 | MQTT 3.1.1 / 5.0 | OASIS specification | [`mqtt`](../mqtt) |
+| 19 | MQTT 3.1.1 / 5.0 | OASIS specification | [`mqtt`](../todo_later/mqtt) |
 
 ### Level 5 · Routing, access and infrastructure
 
@@ -69,7 +69,7 @@ at the packet level, not to replace production libraries.
 | 22 | IS-IS | ISO 10589, [1195](https://www.rfc-editor.org/rfc/rfc1195) | [`go/isis`](go/isis) |
 | 23 | VRRP | [5798](https://www.rfc-editor.org/rfc/rfc5798) | [`go/vrrp`](go/vrrp) |
 | 24 | ARP and ICMP tools (`arping`, `ping`, `traceroute`) | [826](https://www.rfc-editor.org/rfc/rfc826), [792](https://www.rfc-editor.org/rfc/rfc792), [4443](https://www.rfc-editor.org/rfc/rfc4443) | [`arp`](../arp), [`icmp`](../icmp) |
-| 25 | mDNS and DNS-SD | [6762](https://www.rfc-editor.org/rfc/rfc6762), [6763](https://www.rfc-editor.org/rfc/rfc6763) | [`mdns`](../mdns) |
+| 25 | mDNS and DNS-SD | [6762](https://www.rfc-editor.org/rfc/rfc6762), [6763](https://www.rfc-editor.org/rfc/rfc6763) | [`mdns`](../todo_later/mdns) |
 | 26 | PPPoE | [2516](https://www.rfc-editor.org/rfc/rfc2516), [1661](https://www.rfc-editor.org/rfc/rfc1661) | [`go/pppoe`](go/pppoe) |
 | 27 | RPKI-to-Router | [8210](https://www.rfc-editor.org/rfc/rfc8210), [6811](https://www.rfc-editor.org/rfc/rfc6811) | [`go/rpki-rtr`](go/rpki-rtr) |
 | 28 | Diameter | [6733](https://www.rfc-editor.org/rfc/rfc6733) | [`go/diameter`](go/diameter), then [`cpp/diameter`](cpp/diameter) |
@@ -80,11 +80,11 @@ at the packet level, not to replace production libraries.
 
 | # | Protocol | RFC | Where |
 |---|---|---|---|
-| 31 | HTTP/2 | [9113](https://www.rfc-editor.org/rfc/rfc9113), [7541](https://www.rfc-editor.org/rfc/rfc7541) | [`go/http2`](go/http2), then [`http2`](../http2) |
+| 31 | HTTP/2 | [9113](https://www.rfc-editor.org/rfc/rfc9113), [7541](https://www.rfc-editor.org/rfc/rfc7541) | [`go/http2`](go/http2), then [`http2`](../todo_later/http2) |
 | 32 | gRPC | gRPC over HTTP/2 | [`go/grpc`](go/grpc) |
-| 33 | RESP (Redis protocol) | RESP2 / RESP3 | [`resp`](../resp) |
+| 33 | RESP (Redis protocol) | RESP2 / RESP3 | [`resp`](../todo_later/resp) |
 | 34 | L4 load balancer | none (design project) | [`go/l4-loadbalancer`](go/l4-loadbalancer) |
-| 35 | L7 reverse proxy | [9110](https://www.rfc-editor.org/rfc/rfc9110) | [`reverse-proxy`](../reverse-proxy) |
+| 35 | L7 reverse proxy | [9110](https://www.rfc-editor.org/rfc/rfc9110) | [`reverse-proxy`](../todo_later/reverse-proxy) |
 | 36 | WireGuard-style tunnel | WireGuard whitepaper | [`go/wireguard`](go/wireguard) |
 
 ### Level 7 · C++: mobile core and fast packet processing
@@ -226,11 +226,11 @@ correctness, speed and memory. A port counts as done only when it passes the sam
 | Protocol | Go | Rust | C++ | How they differ |
 |---|---|---|---|---|
 | DNS | [`dns`](../dns) | [`dns-rust`](../dns-rust) | | Rust is the port of the Go server and resolver. |
-| HTTP/2 | [`go/http2`](go/http2) | [`http2`](../http2) | | Go first (gRPC builds on it); the Rust port comes later. |
+| HTTP/2 | [`go/http2`](go/http2) | [`http2`](../todo_later/http2) | | Go first (gRPC builds on it); the Rust port comes later. |
 | BFD | [`go/bfd`](go/bfd) | | [`cpp/bfd`](cpp/bfd) | C++ for the timing-sensitive path, after Go works. |
 | Diameter | [`go/diameter`](go/diameter) | | [`cpp/diameter`](cpp/diameter) | Same protocol; pick one first, port only if time allows. |
-| ARP and ICMP | [`arp`](../arp), [`icmp`](../icmp) | [`packet-parser`](../packet-parser) | | Go: tools over raw sockets. Rust: header parsing and pcap files. |
-| Load balancing | [`go/l4-loadbalancer`](go/l4-loadbalancer) | [`reverse-proxy`](../reverse-proxy) | | Different layers: L4 in Go, L7 in Rust. |
+| ARP and ICMP | [`arp`](../arp), [`icmp`](../icmp) | [`packet-parser`](../todo_later/packet-parser) | | Go: tools over raw sockets. Rust: header parsing and pcap files. |
+| Load balancing | [`go/l4-loadbalancer`](go/l4-loadbalancer) | [`reverse-proxy`](../todo_later/reverse-proxy) | | Different layers: L4 in Go, L7 in Rust. |
 | Tunnels | [`go/wireguard`](go/wireguard) | [`rust/gre-vxlan`](rust/gre-vxlan) | | Different protocols, same TUN technique. |
 
 ## Libraries used instead of writing from scratch

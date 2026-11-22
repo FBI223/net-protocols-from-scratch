@@ -1,0 +1,2224 @@
+{
+ "invalid/chunk-body-missing-entirely.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/chunk-body-over-1mib.raw": {
+  "error": "ErrBodyTooLarge",
+  "requests": []
+ },
+ "invalid/chunk-data-longer-than-size.raw": {
+  "error": "ErrMalformedChunk",
+  "requests": []
+ },
+ "invalid/chunk-data-shorter-than-size.raw": {
+  "error": "ErrMalformedChunk",
+  "requests": []
+ },
+ "invalid/chunk-extension-control-char.raw": {
+  "error": "ErrMalformedChunk",
+  "requests": []
+ },
+ "invalid/chunk-giant-announced-size.raw": {
+  "error": "ErrBodyTooLarge",
+  "requests": []
+ },
+ "invalid/chunk-lf-only-after-data.raw": {
+  "error": "ErrMalformedChunk",
+  "requests": []
+ },
+ "invalid/chunk-line-over-limit.raw": {
+  "error": "ErrChunkLineTooLong",
+  "requests": []
+ },
+ "invalid/chunk-line-way-over-limit.raw": {
+  "error": "ErrChunkLineTooLong",
+  "requests": []
+ },
+ "invalid/chunk-missing-crlf-after-data.raw": {
+  "error": "ErrMalformedChunk",
+  "requests": []
+ },
+ "invalid/chunk-one-byte-over-1mib.raw": {
+  "error": "ErrBodyTooLarge",
+  "requests": []
+ },
+ "invalid/chunk-size-0x-prefix.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-size-bare-cr.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-size-empty.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-size-extension-only.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-size-leading-space.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-size-line-bare-lf.raw": {
+  "error": "ErrBareLF",
+  "requests": []
+ },
+ "invalid/chunk-size-negative.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-size-not-hex.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-size-overflow.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-size-plus.raw": {
+  "error": "ErrInvalidChunkSize",
+  "requests": []
+ },
+ "invalid/chunk-too-many-trailers.raw": {
+  "error": "ErrTooManyHeaders",
+  "requests": []
+ },
+ "invalid/chunk-trailer-bare-lf.raw": {
+  "error": "ErrBareLF",
+  "requests": []
+ },
+ "invalid/chunk-trailer-control-char.raw": {
+  "error": "ErrInvalidHeaderValue",
+  "requests": []
+ },
+ "invalid/chunk-trailer-invalid-name.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/chunk-trailer-obs-fold.raw": {
+  "error": "ErrObsFold",
+  "requests": []
+ },
+ "invalid/chunk-truncated-after-zero-chunk.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/chunk-truncated-before-data-crlf.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/chunk-truncated-in-data.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/chunk-truncated-in-size-line.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/chunk-truncated-in-trailers.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/chunk-truncated-no-last-chunk.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/cl-arabic-indic-digit.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-body-missing.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/cl-body-truncated.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/cl-different-values-in-list.raw": {
+  "error": "ErrConflictingContentLength",
+  "requests": []
+ },
+ "invalid/cl-empty.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-float.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-hex.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-inner-space.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-int64-max.raw": {
+  "error": "ErrBodyTooLarge",
+  "requests": []
+ },
+ "invalid/cl-just-over-1mib.raw": {
+  "error": "ErrBodyTooLarge",
+  "requests": []
+ },
+ "invalid/cl-leading-comma.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-letters.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-negative.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-overflow-huge.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-overflow-int64.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-plus.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-quoted.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-three-values-last-differs.raw": {
+  "error": "ErrConflictingContentLength",
+  "requests": []
+ },
+ "invalid/cl-trailing-comma.raw": {
+  "error": "ErrInvalidContentLength",
+  "requests": []
+ },
+ "invalid/cl-two-different-headers.raw": {
+  "error": "ErrConflictingContentLength",
+  "requests": []
+ },
+ "invalid/eol-all-lf.raw": {
+  "error": "ErrBareLF",
+  "requests": []
+ },
+ "invalid/eol-bare-cr-after-host.raw": {
+  "error": "ErrBareCR",
+  "requests": []
+ },
+ "invalid/eol-bare-cr-in-header-value.raw": {
+  "error": "ErrBareCR",
+  "requests": []
+ },
+ "invalid/eol-bare-cr-in-request-line.raw": {
+  "error": "ErrBareCR",
+  "requests": []
+ },
+ "invalid/eol-bare-lf-final-blank-line.raw": {
+  "error": "ErrBareLF",
+  "requests": []
+ },
+ "invalid/eol-bare-lf-header.raw": {
+  "error": "ErrBareLF",
+  "requests": []
+ },
+ "invalid/eol-bare-lf-request-line.raw": {
+  "error": "ErrBareLF",
+  "requests": []
+ },
+ "invalid/eol-cr-only-no-lf.raw": {
+  "error": "io.ErrUnexpectedEOF",
+  "requests": []
+ },
+ "invalid/eol-double-cr.raw": {
+  "error": "ErrBareCR",
+  "requests": []
+ },
+ "invalid/eol-lf-then-cr.raw": {
+  "error": "ErrBareLF",
+  "requests": []
+ },
+ "invalid/hdr-colon-only.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-empty-name.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-host-backslash.raw": {
+  "error": "ErrInvalidHost",
+  "requests": []
+ },
+ "invalid/hdr-host-empty.raw": {
+  "error": "ErrInvalidHost",
+  "requests": []
+ },
+ "invalid/hdr-host-hash.raw": {
+  "error": "ErrInvalidHost",
+  "requests": []
+ },
+ "invalid/hdr-host-inner-space.raw": {
+  "error": "ErrInvalidHost",
+  "requests": []
+ },
+ "invalid/hdr-host-question.raw": {
+  "error": "ErrInvalidHost",
+  "requests": []
+ },
+ "invalid/hdr-host-slash.raw": {
+  "error": "ErrInvalidHost",
+  "requests": []
+ },
+ "invalid/hdr-host-userinfo.raw": {
+  "error": "ErrInvalidHost",
+  "requests": []
+ },
+ "invalid/hdr-name-non-ascii.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-name-nul.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-name-with-paren.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-name-with-slash.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-name-with-space.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-no-colon.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-no-host.raw": {
+  "error": "ErrMissingHost",
+  "requests": []
+ },
+ "invalid/hdr-obs-fold-first-header-line.raw": {
+  "error": "ErrObsFold",
+  "requests": []
+ },
+ "invalid/hdr-obs-fold-space.raw": {
+  "error": "ErrObsFold",
+  "requests": []
+ },
+ "invalid/hdr-obs-fold-tab.raw": {
+  "error": "ErrObsFold",
+  "requests": []
+ },
+ "invalid/hdr-request-smuggled-as-header.raw": {
+  "error": "ErrInvalidHeaderName",
+  "requests": []
+ },
+ "invalid/hdr-space-before-colon-other.raw": {
+  "error": "ErrSpaceBeforeColon",
+  "requests": []
+ },
+ "invalid/hdr-space-before-colon.raw": {
+  "error": "ErrSpaceBeforeColon",
+  "requests": []
+ },
+ "invalid/hdr-tab-before-colon.raw": {
+  "error": "ErrSpaceBeforeColon",
+  "requests": []
+ },
+ "invalid/hdr-two-host-identical.raw": {
+  "error": "ErrMultipleHost",
+  "requests": []
+ },
+ "invalid/hdr-two-host.raw": {
+  "error": "ErrMultipleHost",
+  "requests": []
+ },
+ "invalid/hdr-value-control-del.raw": {
+  "error": "ErrInvalidHeaderValue",
+  "requests": []
+ },
+ "invalid/hdr-value-control-esc.raw": {
+  "error": "ErrInvalidHeaderValue",
+  "requests": []
+ },
+ "invalid/hdr-value-control-ff.raw": {
+  "error": "ErrInvalidHeaderValue",
+  "requests": []
+ },
+ "invalid/hdr-value-control-nul.raw": {
+  "error": "ErrInvalidHeaderValue",
+  "requests": []
+ },
+ "invalid/hdr-value-control-soh.raw": {
+  "error": "ErrInvalidHeaderValue",
+  "requests": []
+ },
+ "invalid/hdr-value-control-vt.raw": {
+  "error": "ErrInvalidHeaderValue",
+  "requests": []
+ },
+ "invalid/limit-headers-101.raw": {
+  "error": "ErrTooManyHeaders",
+  "requests": []
+ },
+ "invalid/limit-headers-3000-tiny.raw": {
+  "error": "ErrTooManyHeaders",
+  "requests": []
+ },
+ "invalid/limit-headers-at-16385-bytes.raw": {
+  "error": "ErrHeaderTooLarge",
+  "requests": []
+ },
+ "invalid/limit-headers-one-huge-line.raw": {
+  "error": "ErrHeaderTooLarge",
+  "requests": []
+ },
+ "invalid/limit-request-line-over-limit.raw": {
+  "error": "ErrRequestLineTooLong",
+  "requests": []
+ },
+ "invalid/limit-request-line-way-over.raw": {
+  "error": "ErrRequestLineTooLong",
+  "requests": []
+ },
+ "invalid/pipeline-first-body-truncated.raw": {
+  "error": "ErrTruncatedBody",
+  "requests": []
+ },
+ "invalid/pipeline-second-bad-version.raw": {
+  "error": "ErrUnsupportedVersion",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "invalid/pipeline-second-bare-lf.raw": {
+  "error": "ErrBareLF",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "invalid/pipeline-second-has-two-hosts.raw": {
+  "error": "ErrMultipleHost",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "invalid/pipeline-second-smuggles-te.raw": {
+  "error": "ErrContentLengthWithChunked",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "invalid/reqline-double-space.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-extra-token.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-leading-space.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-method-invalid-char.raw": {
+  "error": "ErrInvalidMethod",
+  "requests": []
+ },
+ "invalid/reqline-method-with-slash.raw": {
+  "error": "ErrInvalidMethod",
+  "requests": []
+ },
+ "invalid/reqline-missing-target.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-missing-version.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-only-method.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-tab-separators.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-trailing-space.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-two-empty-lines.raw": {
+  "error": "ErrMalformedRequestLine",
+  "requests": []
+ },
+ "invalid/reqline-version-leading-zero.raw": {
+  "error": "ErrMalformedVersion",
+  "requests": []
+ },
+ "invalid/reqline-version-letters.raw": {
+  "error": "ErrMalformedVersion",
+  "requests": []
+ },
+ "invalid/reqline-version-lowercase.raw": {
+  "error": "ErrMalformedVersion",
+  "requests": []
+ },
+ "invalid/reqline-version-no-minor.raw": {
+  "error": "ErrMalformedVersion",
+  "requests": []
+ },
+ "invalid/reqline-version-two-digit-minor.raw": {
+  "error": "ErrMalformedVersion",
+  "requests": []
+ },
+ "invalid/smuggle-cl-then-te.raw": {
+  "error": "ErrContentLengthWithChunked",
+  "requests": []
+ },
+ "invalid/smuggle-classic-cl-te.raw": {
+  "error": "ErrContentLengthWithChunked",
+  "requests": []
+ },
+ "invalid/smuggle-te-chunked-then-identity.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/smuggle-te-chunked-twice.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/smuggle-te-empty.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/smuggle-te-gzip-then-chunked.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/smuggle-te-gzip.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/smuggle-te-identity.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/smuggle-te-space-before-colon.raw": {
+  "error": "ErrSpaceBeforeColon",
+  "requests": []
+ },
+ "invalid/smuggle-te-then-cl.raw": {
+  "error": "ErrContentLengthWithChunked",
+  "requests": []
+ },
+ "invalid/smuggle-te-trailing-comma.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/smuggle-te-two-headers.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/smuggle-te-vertical-tab.raw": {
+  "error": "ErrInvalidHeaderValue",
+  "requests": []
+ },
+ "invalid/smuggle-te-xchunked-with-cl.raw": {
+  "error": "ErrContentLengthWithChunked",
+  "requests": []
+ },
+ "invalid/smuggle-te-xchunked.raw": {
+  "error": "ErrUnsupportedTransferEncoding",
+  "requests": []
+ },
+ "invalid/target-absolute-empty-host.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-absolute-ftp.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-absolute-userinfo.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-asterisk-with-get.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-connect-origin-form.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-connect-with-path.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-control-char.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-del.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-fragment.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-non-ascii-byte.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-nul.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/target-relative.raw": {
+  "error": "ErrInvalidTarget",
+  "requests": []
+ },
+ "invalid/trunc-after-request-line.raw": {
+  "error": "io.ErrUnexpectedEOF",
+  "requests": []
+ },
+ "invalid/trunc-mid-header.raw": {
+  "error": "io.ErrUnexpectedEOF",
+  "requests": []
+ },
+ "invalid/trunc-mid-request-line.raw": {
+  "error": "io.ErrUnexpectedEOF",
+  "requests": []
+ },
+ "invalid/trunc-no-final-blank-line.raw": {
+  "error": "io.ErrUnexpectedEOF",
+  "requests": []
+ },
+ "invalid/trunc-second-request.raw": {
+  "error": "io.ErrUnexpectedEOF",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "invalid/trunc-single-cr-at-end.raw": {
+  "error": "io.ErrUnexpectedEOF",
+  "requests": []
+ },
+ "invalid/version-0.9.raw": {
+  "error": "ErrUnsupportedVersion",
+  "requests": []
+ },
+ "invalid/version-2.0.raw": {
+  "error": "ErrUnsupportedVersion",
+  "requests": []
+ },
+ "invalid/version-3.0.raw": {
+  "error": "ErrUnsupportedVersion",
+  "requests": []
+ },
+ "invalid/version-9.9.raw": {
+  "error": "ErrUnsupportedVersion",
+  "requests": []
+ },
+ "valid/body-100k.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body_len": 102400,
+    "body_sha256": "8e4a094e1fc403a8753098539cec02d064b2ac40bc3b5422a0a5be5c33a3c255",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/big",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-binary-all-bytes.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body_b64": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w==",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-cl-leading-zeros.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "1234567",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-cl-list-identical.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-cl-repeated-identical.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-cl-spaces-around.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-cl-zero.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-contains-crlf-crlf.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "a\r\n\r\nb",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-get-with-body.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "data",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/body-looks-like-a-request.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "GET /evil HTTP/1.1\r\nHost: h\r\n\r\n",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-64k-single-chunk.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body_len": 65536,
+    "body_sha256": "510b126e1d4ced49107fe4ab03ee54cb1c8e4caf6064e1dd29c48d4a3e74c38b",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-binary.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body_b64": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w==",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-data-looks-like-terminator.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "0\r\n\r\nafter",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-empty-body.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-extension-spaces.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-extension.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-hex-lowercase.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "0123456789",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-hex-uppercase.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "0123456789",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-leading-zeros.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-multiple-chunks.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello world",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-one-byte-chunks.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWX",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-simple.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-te-tab-ows.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hi",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-te-uppercase.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hi",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/chunked-trailers.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/client-chrome.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Accept-Language": [
+      "pl-PL,pl;q=0.9,en-US;q=0.8"
+     ],
+     "Cookie": [
+      "session=abc123; theme=dark"
+     ],
+     "Sec-Ch-Ua-Mobile": [
+      "?0"
+     ]
+    },
+    "host": "localhost:8080",
+    "method": "GET",
+    "minor": 1,
+    "path": "/index.html",
+    "query": ""
+   }
+  ]
+ },
+ "valid/client-curl.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Accept": [
+      "*/*"
+     ],
+     "User-Agent": [
+      "curl/8.5.0"
+     ]
+    },
+    "host": "localhost:8080",
+    "method": "GET",
+    "minor": 1,
+    "path": "/index.html",
+    "query": ""
+   }
+  ]
+ },
+ "valid/client-json-api-post.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body_b64": "eyJuYW1lIjoiWm/DqyIsInRhZ3MiOlsiYSIsImIiXSwibiI6MX0=",
+    "headers": {
+     "Authorization": [
+      "Bearer abc.def.ghi"
+     ],
+     "Content-Type": [
+      "application/json"
+     ]
+    },
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/api/items",
+    "query": ""
+   }
+  ]
+ },
+ "valid/client-multipart-upload.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body_b64": "LS1YeVoNCkNvbnRlbnQtRGlzcG9zaXRpb246IGZvcm0tZGF0YTsgbmFtZT0idGl0bGUiDQoNCmhlbGxvDQotLVh5Wg0KQ29udGVudC1EaXNwb3NpdGlvbjogZm9ybS1kYXRhOyBuYW1lPSJmaWxlIjsgZmlsZW5hbWU9ImEuYmluIg0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9vY3RldC1zdHJlYW0NCg0KAAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/w0KLS1YeVotLQ0K",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/upload",
+    "query": ""
+   }
+  ]
+ },
+ "valid/client-urlencoded-form.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "a=1&b=hello+world&c=%C5%BC%C3%B3%C5%82w",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/form",
+    "query": ""
+   }
+  ]
+ },
+ "valid/empty-input.raw": {
+  "error": "",
+  "requests": []
+ },
+ "valid/header-99-extra-headers.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-case-insensitive-names.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Accept": [
+      "x"
+     ],
+     "X-Foo": [
+      "y"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-colons-in-value.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X-U": [
+      "a:b:c"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-comma-list-single-line.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Accept": [
+      "text/html, application/json;q=0.9"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-empty-value-spaces.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X-Empty": [
+      ""
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-empty-value.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X-Empty": [
+      ""
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-expect-continue.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "headers": {
+     "Expect": [
+      "100-continue"
+     ]
+    },
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/up",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-host-ipv6.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "[::1]:8080",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-host-trailing-spaces.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-host-with-port.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "example.com:8080",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-long-value-10k.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X-Long": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-no-ows.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X-A": [
+      "v"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-obs-text-bytes.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-ows-tabs-and-spaces.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X-A": [
+      "v"
+     ],
+     "X-B": [
+      "w"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-quoted-value.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X-Q": [
+      "\"quoted, value\"; a=b"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-repeated-keeps-order.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Accept": [
+      "a",
+      "b",
+      "c"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-two-cookie-lines.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Cookie": [
+      "a=1",
+      "b=2"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-unusual-token-name.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X-Weird_name.v1~": [
+      "v"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/header-websocket-upgrade.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Connection": [
+      "Upgrade"
+     ],
+     "Upgrade": [
+      "websocket"
+     ]
+    },
+    "host": "server.example.com",
+    "method": "GET",
+    "minor": 1,
+    "path": "/chat",
+    "query": ""
+   }
+  ]
+ },
+ "valid/leading-empty-line.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/limit-body-exactly-1mib.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body_len": 1048576,
+    "body_sha256": "42aa1cdf51dd1bfde8745cd4249262d28462f43ef1afe2b66d71502d5e6205d9",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/big",
+    "query": ""
+   }
+  ]
+ },
+ "valid/limit-chunk-line-at-limit.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/limit-chunked-exactly-1mib.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body_len": 1048576,
+    "body_sha256": "42aa1cdf51dd1bfde8745cd4249262d28462f43ef1afe2b66d71502d5e6205d9",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/limit-headers-at-16384-bytes.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "X": [
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/limit-headers-exactly-100.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/limit-request-line-at-limit.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-connect.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "example.com:443",
+    "method": "CONNECT",
+    "minor": 1,
+    "path": "",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-custom-token.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "M-SEARCH",
+    "minor": 1,
+    "path": "/x",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-delete.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "DELETE",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-get.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-head.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "HEAD",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-long-token.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-lowercase-is-a-token.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "get",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-options-path.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "OPTIONS",
+    "minor": 1,
+    "path": "/x",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-options-star.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "OPTIONS",
+    "minor": 1,
+    "path": "*",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-patch.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "headers": {
+     "Content-Length": [
+      "5"
+     ]
+    },
+    "host": "h",
+    "method": "PATCH",
+    "minor": 1,
+    "path": "/r",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-post.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "headers": {
+     "Content-Length": [
+      "5"
+     ]
+    },
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/r",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-put.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "hello",
+    "headers": {
+     "Content-Length": [
+      "5"
+     ]
+    },
+    "host": "h",
+    "method": "PUT",
+    "minor": 1,
+    "path": "/r",
+    "query": ""
+   }
+  ]
+ },
+ "valid/method-trace.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "TRACE",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/pipeline-chunked-then-get.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "xyz",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/b",
+    "query": ""
+   }
+  ]
+ },
+ "valid/pipeline-head-then-post.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "HEAD",
+    "minor": 1,
+    "path": "/a",
+    "query": ""
+   },
+   {
+    "body": "z",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/b",
+    "query": ""
+   }
+  ]
+ },
+ "valid/pipeline-one-empty-line-between.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/b",
+    "query": ""
+   }
+  ]
+ },
+ "valid/pipeline-post-then-get.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "abc",
+    "host": "h",
+    "method": "POST",
+    "minor": 1,
+    "path": "/a",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/b",
+    "query": ""
+   }
+  ]
+ },
+ "valid/pipeline-ten-gets.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/0",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/1",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/2",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/3",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/4",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/5",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/6",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/7",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/8",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/9",
+    "query": ""
+   }
+  ]
+ },
+ "valid/pipeline-three-gets.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/b",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/pipeline-two-gets.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   },
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/b",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-absolute-http.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "example.com",
+    "method": "GET",
+    "minor": 1,
+    "path": "/a",
+    "query": "b=c"
+   }
+  ]
+ },
+ "valid/target-absolute-https-port.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "example.com:8443",
+    "method": "GET",
+    "minor": 1,
+    "path": "/x",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-absolute-ipv6.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "[::1]:8080",
+    "method": "GET",
+    "minor": 1,
+    "path": "/p",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-absolute-no-path.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "example.com",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-absolute-query-only.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "example.com",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": "x=1"
+   }
+  ]
+ },
+ "valid/target-absolute-uppercase-scheme.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "EXAMPLE.com",
+    "method": "GET",
+    "minor": 1,
+    "path": "/p",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-bad-escape-reaches-router.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/%zz",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-deep-path.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/a/b/c/d/e/f/g",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-dot-segments-reach-router.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/a/../b/./c",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-double-slash.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "//a//b",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-empty-query.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/p",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-long-but-within-limit.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-percent-encoded.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/caf%C3%A9/a%20b",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-query.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/search",
+    "query": "q=go&lang=pl"
+   }
+  ]
+ },
+ "valid/target-question-mark-in-query.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/p",
+    "query": "a=b?c=d"
+   }
+  ]
+ },
+ "valid/target-sub-delims.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/a;b=c/(x)/!$&'*+,=:@",
+    "query": ""
+   }
+  ]
+ },
+ "valid/target-tilde-and-dots.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/~user/file.tar.gz",
+    "query": ""
+   }
+  ]
+ },
+ "valid/version-higher-minor-needs-host.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 9,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/version-http10-keep-alive-header.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Connection": [
+      "keep-alive"
+     ]
+    },
+    "host": "",
+    "method": "GET",
+    "minor": 0,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/version-http10-no-host.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "",
+    "method": "GET",
+    "minor": 0,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/version-http10-with-host.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "host": "h",
+    "method": "GET",
+    "minor": 0,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ },
+ "valid/version-http11-connection-close.raw": {
+  "error": "",
+  "requests": [
+   {
+    "body": "",
+    "headers": {
+     "Connection": [
+      "close"
+     ]
+    },
+    "host": "h",
+    "method": "GET",
+    "minor": 1,
+    "path": "/",
+    "query": ""
+   }
+  ]
+ }
+}

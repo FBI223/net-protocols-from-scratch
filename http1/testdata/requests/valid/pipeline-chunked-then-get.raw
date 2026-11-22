@@ -1,0 +1,12 @@
+POST /c HTTP/1.1
+Host: h
+Transfer-Encoding: chunked
+
+3
+xyz
+0
+T: 1
+
+GET /b HTTP/1.1
+Host: h
+
